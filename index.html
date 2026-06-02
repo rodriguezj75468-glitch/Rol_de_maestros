@@ -2179,6 +2179,13 @@
                     <span class="bg-chip-label">Negro</span>
                 </button>
             </div>
+
+            <!-- Option 4: Compartir -->
+            <div class="drawer-section-title">📤 Compartir</div>
+            <div class="drawer-item" onclick="shareApp()" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; margin-top: 0.5rem; justify-content: center; cursor: pointer; transition: all 0.3s ease;">
+                <span class="drawer-item-icon">✨</span>
+                <span class="drawer-item-text" style="color: #a5b4fc; font-weight: 700;">Compartir Planeador</span>
+            </div>
         </div>
     </div>
 
@@ -3140,6 +3147,81 @@
                     chip.classList.remove('active');
                 }
             });
+        }
+
+        // Premium Web Share and Clipboard copy function
+        async function shareApp() {
+            const shareData = {
+                title: '📅 Planner Dominical - Rol de Clases',
+                text: '👋 ¡Hola! Aquí tienes el Rol de Clases Dominicales actualizado (Mayo - Julio 2026). Consúltalo en tiempo real aquí:',
+                url: window.location.href
+            };
+
+            // Attempt native mobile sharing
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.error('Error sharing:', err);
+                    } else {
+                        return; // User cancelled
+                    }
+                }
+            }
+
+            // Fallback: Copy to clipboard and show beautiful premium custom alert
+            try {
+                await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+                showToastNotification('📋 ¡Enlace de compartir copiado al portapapeles!');
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                alert(`Copia este enlace para compartirlo:\n${window.location.href}`);
+            }
+        }
+
+        // Beautiful custom toast notification
+        function showToastNotification(message) {
+            let toast = document.getElementById('customShareToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'customShareToast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 2rem;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(100px);
+                    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 50px;
+                    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+                    z-index: 10000;
+                    font-family: 'Outfit', sans-serif;
+                    font-weight: 600;
+                    font-size: 0.95rem;
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+                    opacity: 0;
+                    pointer-events: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                `;
+                document.body.appendChild(toast);
+            }
+            toast.innerText = message;
+            // Trigger animation
+            setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(0)';
+                toast.style.opacity = '1';
+            }, 50);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(100px)';
+                toast.style.opacity = '0';
+            }, 3000);
         }
 
         // Start App
