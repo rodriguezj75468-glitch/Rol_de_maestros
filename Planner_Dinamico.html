@@ -1,0 +1,3152 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner Dinámico - Clases Dominicales</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap');
+
+        :root {
+            --bg-color: #0b0f19;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-1: #3b82f6;
+            /* Blue for 3-5 */
+            --accent-2: #10b981;
+            /* Green for 6-8 */
+            --accent-3: #f59e0b;
+            /* Yellow for 9-11 */
+            --accent-4: #8b5cf6;
+            /* Purple for JV 12 */
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --glow-color: rgba(99, 102, 241, 0.15);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 25%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 2rem 1.5rem;
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        /* Interactive Filter Area */
+        .filter-container {
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+            margin-bottom: 2rem;
+            box-sizing: border-box;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .filter-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #a5b4fc, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.3);
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+            transition: color 0.2s ease;
+        }
+
+        .clear-btn:hover {
+            color: var(--text-main);
+        }
+
+        /* Dynamic suggestion box */
+        .suggestions-box {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-weight: 500;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        .quick-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            padding: 0.4rem 0.9rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .tag-btn.active {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: var(--text-main);
+            border-color: transparent;
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Teacher Stats Card */
+        .stats-card {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.15));
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .stats-header {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #a5b4fc;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .stat-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+
+        /* Timeline Blocks */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 2rem 4rem;
+            box-sizing: border-box;
+        }
+
+        .week-block {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.2rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .week-block.past {
+            opacity: 0.65;
+            background: rgba(17, 24, 39, 0.4);
+        }
+
+        .week-block.suspended {
+            border: 2px dashed rgba(244, 63, 94, 0.35);
+            background: rgba(244, 63, 94, 0.03);
+        }
+
+        /* State badges */
+        .state-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.3rem 0.75rem;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-past {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .badge-suspended {
+            background: rgba(244, 63, 94, 0.15);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        .badge-next {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+        }
+
+        .theme-link-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            padding: 0.35rem 0.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .theme-link-badge:hover {
+            background: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .group-title a {
+            transition: all 0.2s ease;
+        }
+
+        .group-title a:hover {
+            color: #ffffff !important;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        .group-title a:hover .card-link-icon {
+            opacity: 1 !important;
+            color: #60a5fa;
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .week-date {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .week-theme {
+            font-size: 1.15rem;
+            font-weight: 500;
+            padding: 0.4rem 1.25rem;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50px;
+            color: #cbd5e1;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .suspended-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .suspended-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f43f5e;
+            margin-bottom: 0.5rem;
+        }
+
+        .suspended-desc {
+            color: var(--text-muted);
+            max-width: 600px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced Vertical Lesson Card */
+        .lesson-detail-card {
+            background: rgba(15, 23, 42, 0.55);
+            border-radius: 20px;
+            padding: 2.2rem 1.5rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 5px solid;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            margin-top: 1.5rem;
+            /* Space for floating circle date */
+        }
+
+        .lesson-detail-card.g-3-5 {
+            border-left-color: var(--accent-1);
+        }
+
+        .lesson-detail-card.g-6-8 {
+            border-left-color: var(--accent-2);
+        }
+
+        .lesson-detail-card.g-9-11 {
+            border-left-color: var(--accent-3);
+        }
+
+        .lesson-detail-card.g-jv12 {
+            border-left-color: var(--accent-4);
+        }
+
+        .lesson-detail-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+            background: rgba(20, 29, 47, 0.7);
+        }
+
+        .lesson-detail-card.highlighted-card {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: scale(1.03) translateY(-4px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.25);
+            z-index: 2;
+        }
+
+        /* Floating Circular Date Header with Day and Month */
+        .circle-date-badge {
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 2.5px solid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            z-index: 5;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+        }
+
+        .g-3-5 .circle-date-badge {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .g-6-8 .circle-date-badge {
+            border-color: var(--accent-2);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .g-9-11 .circle-date-badge {
+            border-color: var(--accent-3);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .g-jv12 .circle-date-badge {
+            border-color: var(--accent-4);
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .circle-date-day {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .circle-date-month {
+            font-size: 0.52rem;
+            text-transform: uppercase;
+            font-weight: 750;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        .lesson-detail-card:hover .circle-date-badge {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        /* Color-Coded Date Header inside the Card Body */
+        .card-date-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .g-3-5 .card-date-label {
+            color: #60a5fa;
+        }
+
+        .g-6-8 .card-date-label {
+            color: #34d399;
+        }
+
+        .g-9-11 .card-date-label {
+            color: #fbbf24;
+        }
+
+        .g-jv12 .card-date-label {
+            color: #a78bfa;
+        }
+
+        /* Card Content Hierarchy */
+        .card-lesson-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 0.5rem;
+            margin-bottom: 0.85rem;
+            line-height: 1.4;
+            display: block;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .card-lesson-title:hover {
+            color: #60a5fa;
+        }
+
+        .card-capsules-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .capsule-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            box-sizing: border-box;
+            border: 1px solid transparent;
+        }
+
+        .capsule-age-3-5 {
+            background: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .capsule-age-6-8 {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .capsule-age-9-11 {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .capsule-age-jv12 {
+            background: rgba(139, 92, 246, 0.12);
+            color: #a78bfa;
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .capsule-room {
+            background: rgba(51, 65, 85, 0.5);
+            color: #cbd5e1;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .capsule-status-badge {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        /* Role Rows with Icons */
+        .card-role-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 0.85rem;
+            margin-top: auto;
+        }
+
+        .card-role-item {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.95rem;
+            padding: 0.4rem 0.55rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .card-role-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .card-role-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 0.2rem 0.45rem;
+            border-radius: 6px;
+            min-width: 75px;
+            text-align: center;
+            box-sizing: border-box;
+            border: 1px solid transparent;
+        }
+
+        .card-role-item.role-lead .card-role-label {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .card-role-item.role-support .card-role-label {
+            background: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .card-role-item.highlighted-role {
+            background: rgba(99, 102, 241, 0.12);
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .card-role-item.highlighted-role .role-name {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .card-role-icon {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        /* DIMMED STATE (when filtering) */
+        .week-block.dimmed-week {
+            opacity: 0.25;
+            transform: scale(0.98);
+        }
+
+        .lesson-detail-card.dimmed-card {
+            opacity: 0.2;
+            transform: scale(0.96);
+            filter: blur(0.5px);
+        }
+
+        /* Layout Grid for Desktop */
+        .main-layout-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 1024px) {
+            .main-layout-container {
+                grid-template-columns: 1fr 340px;
+                /* Sidebar layout */
+                align-items: start;
+            }
+        }
+
+        /* Premium Personalized Summary Panel */
+        .teacher-dashboard-card {
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-sizing: border-box;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+            position: sticky;
+            top: 2rem;
+        }
+
+        /* Avatar styling */
+        .dashboard-user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5, #c084fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.35);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .avatar-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.55);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(2.5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: #ffffff;
+            font-size: 1.3rem;
+            border-radius: 50%;
+        }
+
+        .avatar-container:hover .avatar-upload-overlay {
+            opacity: 1;
+        }
+
+        .avatar-initials {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .dashboard-username {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        /* Metrics grid 2x2 */
+        .dashboard-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .metric-box {
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 0.85rem 0.65rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            background: rgba(15, 23, 42, 0.75);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .metric-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.15rem;
+            line-height: 1.2;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .metric-lbl {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        /* Large horizontal next lesson metric */
+        .metric-large-box {
+            grid-column: span 2;
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .metric-large-box:hover {
+            background: rgba(15, 23, 42, 0.75);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .metric-large-title {
+            font-size: 0.9rem;
+            font-weight: 750;
+            color: #cbd5e1;
+            margin-bottom: 0.35rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .metric-large-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Focused agenda list */
+        .dashboard-agenda-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-top: 0.5rem;
+            margin-bottom: -0.5rem;
+        }
+
+        .dashboard-agenda-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .dashboard-agenda-item {
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 0.6rem 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        .dashboard-agenda-item:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .agenda-date {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .agenda-role-lbl {
+            font-size: 0.65rem;
+            font-weight: 750;
+            text-transform: uppercase;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .agenda-role-lbl.lead {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+        }
+
+        .agenda-role-lbl.support {
+            background: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modern Month Navigation Grid - Thinner Navigation Pills */
+        .month-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem;
+            width: 90%;
+            max-width: 580px;
+            margin: 1.5rem auto 2.5rem;
+            box-sizing: border-box;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .month-card {
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 28px;
+            padding: 0.6rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 64px;
+            box-sizing: border-box;
+        }
+
+        .month-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.25);
+            background: rgba(15, 23, 42, 0.75);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.1);
+        }
+
+        .month-card.active {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Active bottom line indicator */
+        .month-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: linear-gradient(90deg, #60a5fa, #c084fc);
+            border-radius: 3px 3px 0 0;
+            transform: scaleX(0);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+        }
+
+        .month-card.active::after {
+            transform: scaleX(1);
+        }
+
+        .month-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 0.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .month-card:hover .month-name,
+        .month-card.active .month-name {
+            color: #ffffff;
+        }
+
+        /* Center-Stacked Lesson Count Badge */
+        .month-lessons-badge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            color: #ffffff;
+            border-radius: 50px;
+            padding: 0.12rem 0.55rem;
+            margin-bottom: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .month-card.active .month-lessons-badge {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            box-shadow: 0 0 12px rgba(124, 58, 237, 0.55);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Unified Controls Visual Bar - Room Filter Buttons */
+        .room-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            padding: 0.45rem 0.95rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            box-sizing: border-box;
+        }
+
+        .room-btn:hover {
+            transform: translateY(-1.5px);
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .room-btn.active {
+            color: #ffffff;
+            border-color: transparent;
+        }
+
+        .room-btn.active[data-room="all"] {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        .room-btn.active.room-3-5 {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .room-btn.active.room-6-8 {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #34d399;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .room-btn.active.room-9-11 {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            color: #fbbf24;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+        }
+
+        .room-btn.active.room-jv12 {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            color: #a78bfa;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+        }
+
+        /* Coming Soon Card Styles */
+        .coming-soon-card {
+            background: rgba(30, 41, 59, 0.35);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 4rem 2rem;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-out;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .coming-soon-icon {
+            font-size: 3rem;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .coming-soon-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .coming-soon-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.3rem;
+            }
+
+            .week-block {
+                padding: 1.4rem;
+            }
+
+            .week-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .week-theme {
+                font-size: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .filter-container {
+                padding: 1.25rem;
+                border-radius: 18px;
+            }
+
+            .search-input {
+                padding: 0.8rem 1rem;
+            }
+        }
+
+        /* Welcome Banner Premium Styles */
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 18px;
+            padding: 1rem 1.5rem;
+            width: 90%;
+            max-width: 800px;
+            box-sizing: border-box;
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideDownWelcome 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .welcome-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .welcome-text span {
+            background: linear-gradient(135deg, #a5b4fc, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 750;
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .welcome-badge {
+            background: rgba(99, 102, 241, 0.25);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .change-user-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .change-user-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        @keyframes slideDownWelcome {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Age Filter premium button styles */
+        .age-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .age-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            padding: 0.5rem 1.1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .age-btn:hover {
+            transform: translateY(-2px);
+            color: var(--text-main);
+        }
+
+        /* Active / color-specific styles */
+        .age-btn.active[data-age="all"] {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--text-main);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .age-btn.age-3-5:hover,
+        .age-btn.age-3-5.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .age-btn.age-6-8:hover,
+        .age-btn.age-6-8.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.5);
+            color: #34d399;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .age-btn.age-9-11:hover,
+        .age-btn.age-9-11.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.5);
+            color: #fbbf24;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+        }
+
+        .age-btn.age-jv12:hover,
+        .age-btn.age-jv12.active {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.5);
+            color: #a78bfa;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Welcome Login Modal Styles */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 15, 25, 0.94);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .login-modal-content {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 3rem 2rem;
+            width: 90%;
+            max-width: 480px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .login-logo {
+            font-size: 3.5rem;
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+
+        .login-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .login-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .login-form-group {
+            width: 100%;
+            position: relative;
+        }
+
+        .login-select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.85);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .login-select:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.3);
+        }
+
+        .login-form-group::after {
+            content: "▼";
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+        }
+
+        .login-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+            background: linear-gradient(135deg, #4338ca, #6d28d9);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-btn-secondary {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            text-decoration: underline;
+        }
+
+        .login-btn-secondary:hover {
+            color: var(--text-main);
+        }
+
+        /* Fixed Hamburger Menu Button */
+        .menu-toggle-btn {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+        }
+
+        .menu-toggle-btn:hover {
+            transform: scale(1.08);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+            background: rgba(30, 41, 59, 0.85);
+        }
+
+        .menu-toggle-btn .bar {
+            width: 20px;
+            height: 2px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Animate Hamburger bars to an 'X' when open */
+        .menu-toggle-btn.open .bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .menu-toggle-btn.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle-btn.open .bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Slide-out Navigation Drawer */
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            /* Initially hidden off-screen to the right */
+            width: 300px;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .nav-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .drawer-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .drawer-close-btn:hover {
+            color: var(--text-main);
+        }
+
+        .drawer-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .drawer-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .drawer-item:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(-2px);
+        }
+
+        .drawer-item-icon {
+            font-size: 1.3rem;
+        }
+
+        .drawer-item-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .drawer-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-top: 0.75rem;
+            margin-bottom: -0.25rem;
+        }
+
+        /* Drawer Links (Resources) */
+        .drawer-link-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .drawer-link-item:hover {
+            transform: translateX(-2px);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .drawer-link-icon {
+            font-size: 1.4rem;
+            min-width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drawer-link-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .drawer-link-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .drawer-link-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Backdrop Overlay */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 997;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .drawer-overlay.open {
+            display: block;
+        }
+
+        /* Collapsible Submenu for Recursos */
+        .drawer-submenu {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding-left: 0.5rem;
+        }
+
+        .drawer-submenu.open {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .drawer-item .arrow-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .drawer-item.active-item .arrow-icon {
+            transform: rotate(90deg);
+            color: var(--text-main);
+        }
+
+        /* Switch Toggle Styles */
+        .switch input:checked+.slider {
+            background-color: #6366f1;
+            border-color: transparent;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .switch input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Custom Background Options (Blanco o Negro) */
+        body.bg-theme-light {
+            --bg-color: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --glow-color: rgba(99, 102, 241, 0.05);
+
+            background: #f1f5f9;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.04) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 25%);
+            color: var(--text-main);
+        }
+
+        body.bg-theme-light .login-modal {
+            background: rgba(248, 250, 252, 0.95);
+        }
+
+        body.bg-theme-light .login-modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        body.bg-theme-light .login-select {
+            background: rgba(255, 255, 255, 0.95);
+            color: #0f172a;
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        body.bg-theme-light .month-card {
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        body.bg-theme-light .month-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        body.bg-theme-light .month-card.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
+            border-color: rgba(124, 58, 237, 0.4);
+        }
+
+        body.bg-theme-light .welcome-text {
+            color: #1e1b4b;
+        }
+
+        body.bg-theme-light .welcome-text span {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body.bg-theme-light .lesson-detail-card {
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .lesson-detail-card.highlighted-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(99, 102, 241, 0.35);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.12);
+        }
+
+        body.bg-theme-light .card-lesson-title {
+            color: #0f172a;
+        }
+
+        body.bg-theme-light .card-lesson-title:hover {
+            color: #4f46e5;
+        }
+
+        body.bg-theme-light .circle-date-badge {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body.bg-theme-light .circle-date-day {
+            color: #0f172a;
+        }
+
+        body.bg-theme-light .card-role-item {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .card-role-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        /* High-contrast and extremely readable teacher and support names in Light Theme */
+        body.bg-theme-light .role-name {
+            color: #0f172a !important; /* Very dark slate black for maximum legibility */
+            font-weight: 700 !important; /* Bold font weight to stand out clearly */
+        }
+
+        body.bg-theme-light .card-role-item.highlighted-role {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        body.bg-theme-light .card-role-item.highlighted-role .role-name {
+            color: #4f46e5 !important;
+            font-weight: 800 !important;
+        }
+
+        /* High-contrast Dashboard styles for Light Theme */
+        body.bg-theme-light .teacher-dashboard-card {
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        body.bg-theme-light .dashboard-username {
+            color: #0f172a;
+        }
+
+        body.bg-theme-light .dashboard-agenda-title {
+            color: #475569;
+        }
+
+        body.bg-theme-light .dashboard-agenda-item {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .dashboard-agenda-item:hover {
+            background: rgba(99, 102, 241, 0.05);
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+
+        body.bg-theme-light .agenda-date {
+            color: #0f172a;
+        }
+
+        body.bg-theme-light .metric-box {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .metric-box:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+
+        body.bg-theme-light .metric-val {
+            color: #4f46e5;
+        }
+
+        body.bg-theme-light .metric-large-box {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .metric-large-box:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+
+        body.bg-theme-light .metric-large-title {
+            color: #0f172a;
+        }
+
+        body.bg-theme-light .nav-drawer {
+            background: rgba(255, 255, 255, 0.9);
+            border-left: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+        }
+
+        body.bg-theme-light .drawer-item {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .drawer-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        body.bg-theme-light .drawer-link-item {
+            background: rgba(0, 0, 0, 0.015);
+            border-color: rgba(0, 0, 0, 0.03);
+        }
+
+        body.bg-theme-light .drawer-link-item:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        body.bg-theme-light .menu-toggle-btn {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.bg-theme-light .toggle-container {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        body.bg-theme-light .badge-inactive-month {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        body.bg-theme-light .week-block {
+            background: rgba(255, 255, 255, 0.65);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        body.bg-theme-light .week-block.past {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        body.bg-theme-light .week-theme {
+            background: rgba(0, 0, 0, 0.03);
+            color: #334155;
+        }
+
+        body.bg-theme-light .group-age {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.06);
+            color: #334155;
+        }
+
+        body.bg-theme-light .theme-link-badge {
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        /* Dark Theme variables */
+        body.bg-theme-dark {
+            --bg-color: #0b0f19;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --glow-color: rgba(99, 102, 241, 0.15);
+
+            background: var(--bg-color);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 25%);
+        }
+
+        /* Background Selector inside Drawer */
+        .bg-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .bg-chip {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.55rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-muted);
+            box-sizing: border-box;
+        }
+
+        .bg-chip:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+            transform: translateY(-1px);
+        }
+
+        .bg-chip.active {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.5);
+            color: var(--text-main);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+        }
+
+        .bg-preview {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .preview-light {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-dark {
+            background: #0b0f19;
+            box-shadow: inset 0 0 5px rgba(59, 130, 246, 0.8);
+        }
+
+        .bg-chip-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hamburger Menu Button -->
+    <button id="menuToggleBtn" class="menu-toggle-btn" onclick="toggleMenu()" aria-label="Menú">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+
+    <!-- Drawer Overlay Backdrop -->
+    <div id="drawerOverlay" class="drawer-overlay" onclick="toggleMenu()"></div>
+
+    <!-- Slide-out Navigation Drawer -->
+    <div id="navDrawer" class="nav-drawer">
+        <div class="drawer-header">
+            <div class="drawer-title">📌 Menú</div>
+            <button class="drawer-close-btn" onclick="toggleMenu()">&times;</button>
+        </div>
+        <div class="drawer-content">
+            <!-- Option 1: Roles -->
+            <div class="drawer-item" onclick="navigateToSection('roles')">
+                <span class="drawer-item-icon">🗓️</span>
+                <span class="drawer-item-text">1. Roles y Calendario</span>
+            </div>
+
+            <!-- Option 2: Recursos (Collapsible Dropdown) -->
+            <div id="recursosToggleItem" class="drawer-item" onclick="toggleRecursosMenu()">
+                <span class="drawer-item-icon">📂</span>
+                <span class="drawer-item-text">2. Recursos</span>
+                <span class="arrow-icon">▶</span>
+            </div>
+
+            <!-- Collapsible Links -->
+            <div id="recursosSubmenu" class="drawer-submenu">
+                <a href="https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f" target="_blank"
+                    class="drawer-link-item">
+                    <span class="drawer-link-icon">📁</span>
+                    <div class="drawer-link-info">
+                        <span class="drawer-link-title">Carpeta General</span>
+                        <span class="drawer-link-desc">Rol general y lecciones</span>
+                    </div>
+                </a>
+                <a href="https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" target="_blank"
+                    class="drawer-link-item">
+                    <span class="drawer-link-icon">👶👧</span>
+                    <div class="drawer-link-info">
+                        <span class="drawer-link-title">Clases 3-5 y 6-8 años</span>
+                        <span class="drawer-link-desc">Material de Párvulos y Primaria A</span>
+                    </div>
+                </a>
+                <a href="https://drive.google.com/drive/folders/1XdLXbrPqR_I-9ibbIZppEnU2UMRLz65j" target="_blank"
+                    class="drawer-link-item">
+                    <span class="drawer-link-icon">👦</span>
+                    <div class="drawer-link-info">
+                        <span class="drawer-link-title">Clases 9-11 años</span>
+                        <span class="drawer-link-desc">Material de Primaria B</span>
+                    </div>
+                </a>
+                <a href="https://drive.google.com/drive/folders/1cFyxxvBvxgcWTvmt5h1HdizNw-HnxF4q" target="_blank"
+                    class="drawer-link-item">
+                    <span class="drawer-link-icon">🎓</span>
+                    <div class="drawer-link-info">
+                        <span class="drawer-link-title">Clase JV 12</span>
+                        <span class="drawer-link-desc">Material de Pre-adolescentes</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Option 3: Personalizar Fondo -->
+            <div class="drawer-section-title">🎨 Personalizar Fondo</div>
+            <div class="bg-selector-grid">
+                <button class="bg-chip bg-light" onclick="changeBackground('light')" title="Tema Claro (Blanco)">
+                    <span class="bg-preview preview-light"></span>
+                    <span class="bg-chip-label">Blanco</span>
+                </button>
+                <button class="bg-chip bg-dark active" onclick="changeBackground('dark')" title="Tema Oscuro (Negro)">
+                    <span class="bg-preview preview-dark"></span>
+                    <span class="bg-chip-label">Negro</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal (Who are you?) -->
+    <div id="loginModal" class="login-modal" style="display: none;">
+        <div class="login-modal-content">
+            <div class="login-logo">🗓️</div>
+            <h2 class="login-title">Planner Dominical</h2>
+            <p class="login-subtitle">Para darte una experiencia personalizada y mostrar tu agenda dominical, dinos
+                quién eres:</p>
+
+            <div class="login-form-group">
+                <select id="loginTeacherSelect" class="login-select">
+                    <option value="" disabled selected>Selecciona tu nombre...</option>
+                </select>
+            </div>
+
+            <button id="loginConfirmBtn" class="login-btn" onclick="confirmLogin()" disabled>Comenzar y Ver mi
+                Rol</button>
+            <button class="login-btn-secondary" onclick="skipLogin()">Ver todo el calendario general</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>Planner Dominical</h1>
+        <div class="subtitle">Roles y Temas de Clases Dominicales 🚀</div>
+    </header>
+
+    <!-- Welcome Banner Container -->
+    <div id="welcomeBanner" class="welcome-banner" style="display: none;"></div>
+
+    <!-- Hidden input for avatar upload -->
+    <input type="file" id="dashboardPhotoInput" style="display: none;" accept="image/*"
+        onchange="uploadDashboardPhoto(event)">
+
+    <!-- Month Selector Grid -->
+    <div class="month-selector-grid">
+        <div class="month-card active" data-month="Todos" onclick="selectMonth('Todos')">
+            <span class="month-lessons-badge">9</span>
+            <span class="month-name">Todos</span>
+        </div>
+        <div class="month-card" data-month="Mayo" onclick="selectMonth('Mayo')">
+            <span class="month-lessons-badge">2</span>
+            <span class="month-name">Mayo</span>
+        </div>
+        <div class="month-card" data-month="Junio" onclick="selectMonth('Junio')">
+            <span class="month-lessons-badge">4</span>
+            <span class="month-name">Junio</span>
+        </div>
+        <div class="month-card" data-month="Julio" onclick="selectMonth('Julio')">
+            <span class="month-lessons-badge">4</span>
+            <span class="month-name">Julio</span>
+        </div>
+    </div>
+
+    <!-- Unified Filters and Timeline Header -->
+    <div id="timelineHeader" class="timeline-header"
+        style="display: none; flex-direction: column; gap: 1.25rem; width: 90%; max-width: 1100px; margin: 0.5rem auto 1.5rem; box-sizing: border-box; background: rgba(30, 41, 59, 0.25); border: 1px solid var(--card-border); padding: 1.25rem; border-radius: 20px; backdrop-filter: blur(8px);">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+            <h2 id="timelineTitle"
+                style="font-family: Outfit, sans-serif; font-size: 1.4rem; font-weight: 700; margin: 0; background: linear-gradient(135deg, #a5b4fc, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+                📅 Cronograma de Clases</h2>
+
+            <div class="toggle-container"
+                style="display: flex; align-items: center; gap: 0.75rem; background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255,255,255,0.05); padding: 0.45rem 1rem; border-radius: 50px;">
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">👁️ Ver fechas de otros
+                    maestros</span>
+                <label class="switch"
+                    style="position: relative; display: inline-block; width: 40px; height: 22px; margin: 0;">
+                    <input type="checkbox" id="showOthersToggle" onchange="toggleOthersDates(this.checked)"
+                        style="opacity: 0; width: 0; height: 0;">
+                    <span class="slider"
+                        style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.08); transition: .4s; border-radius: 34px; border: 1px solid rgba(255,255,255,0.12);"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Unified Classroom Visual Pill Buttons -->
+        <div class="room-filter-container"
+            style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.75rem;">
+            <span
+                style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700; font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 0.5rem;">🏫
+                Filtrar por Aula:</span>
+            <button class="room-btn active" data-room="all" onclick="selectRoom('all')">Todas</button>
+            <button class="room-btn room-3-5" data-room="3-5" onclick="selectRoom('3-5')">👶 3 a 5 años</button>
+            <button class="room-btn room-6-8" data-room="6-8" onclick="selectRoom('6-8')">👧 6 a 8 años</button>
+            <button class="room-btn room-9-11" data-room="9-11" onclick="selectRoom('9-11')">👦 9 a 11 años</button>
+            <button class="room-btn room-jv12" data-room="jv12" onclick="selectRoom('jv12')">🎓 JV 12</button>
+        </div>
+    </div>
+
+    <!-- Main Content Layout (Chronological Timeline + Personalized Dashboard Sidebar) -->
+    <div class="main-layout-container">
+        <!-- Timeline Blocks (Left Column) -->
+        <div id="timelineContainer" class="timeline" style="padding: 0; width: 100%; max-width: 100%;"></div>
+
+        <!-- Personalized Summary Panel (Right Column, generated dynamically on login) -->
+        <div id="teacherDashboard" class="teacher-dashboard-container" style="display: none; width: 100%;"></div>
+    </div>
+
+    <script>
+        // Full shifted schedule database
+        const scheduleData = [
+            {
+                date: "24 de Mayo",
+                theme: "✨ Lección 3: José en Egipto",
+                status: "past", // past, suspended, current
+                badgeText: "Completado",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Danna", apoyo: "Denisse" },
+                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
+                    "9-11": { encargado: "Alan", apoyo: "Isaí" },
+                    "jv12": { encargado: "Robert", apoyo: "Sara" }
+                }
+            },
+            {
+                date: "31 de Mayo",
+                theme: "🚫 Cierre de Ayuno",
+                status: "suspended",
+                badgeText: "Sin Clase",
+                classes: null
+            },
+            {
+                date: "07 de Junio",
+                theme: "🚀 Lección 4: Débora",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Aby", apoyo: "Alondra" },
+                    "6-8": { encargado: "Sinddy", apoyo: "Denisse" },
+                    "9-11": { encargado: "Daniel", apoyo: "Rebeca" },
+                    "jv12": { encargado: "Ramón", apoyo: "Claudia" }
+                }
+            },
+            {
+                date: "14 de Junio",
+                theme: "💡 Lección 5: Daniel y la obediencia",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Alexa", apoyo: "Yadira" },
+                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
+                    "9-11": { encargado: "Joaquín", apoyo: "Mauricio" },
+                    "jv12": { encargado: "Josué", apoyo: "Raquel" }
+                }
+            },
+            {
+                date: "21 de Junio",
+                theme: "🔥 Lección 6: Ester",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Liz", apoyo: "Camila" },
+                    "6-8": { encargado: "Ramón", apoyo: "Claudia" },
+                    "9-11": { encargado: "Alan", apoyo: "Rebeca" },
+                    "jv12": { encargado: "Robert", apoyo: "Sara" }
+                }
+            },
+            {
+                date: "28 de Junio",
+                theme: "⭐ Lección 7: Esteban enfrenta a la muerte",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Alexa", apoyo: "Alondra" },
+                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
+                    "9-11": { encargado: "Daniel", apoyo: "Mauricio" },
+                    "jv12": { encargado: "Ramón", apoyo: "Claudia" }
+                }
+            },
+            {
+                date: "05 de Julio",
+                theme: "🌟 Lección 8: Pablo en Filipos",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Danna", apoyo: "Yadira" },
+                    "6-8": { encargado: "Sinddy", apoyo: "Denisse" },
+                    "9-11": { encargado: "Joaquín", apoyo: "Cristina" },
+                    "jv12": { encargado: "Robert", apoyo: "Sara" }
+                }
+            },
+            {
+                date: "12 de Julio",
+                theme: "✨ Lección 9",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Aby", apoyo: "Denisse" },
+                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
+                    "9-11": { encargado: "Alan", apoyo: "Rebeca" },
+                    "jv12": { encargado: "Ramón", apoyo: "Claudia" }
+                }
+            },
+            {
+                date: "19 de Julio",
+                theme: "🌈 Lección 10",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Alexa", apoyo: "Alexa Sarai" },
+                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
+                    "9-11": { encargado: "Daniel", apoyo: "Mauricio" },
+                    "jv12": { encargado: "Robert", apoyo: "Sara" }
+                }
+            },
+            {
+                date: "26 de Julio",
+                theme: "⚔️ Lección 11",
+                status: "current",
+                badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Liz", apoyo: "Camila" },
+                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
+                    "9-11": { encargado: "Joaquín", apoyo: "Cristina" },
+                    "jv12": { encargado: "Ramón", apoyo: "Claudia" }
+                }
+            }
+        ];
+
+        // Unique teacher names sorted alphabetically
+        const teacherList = [
+            "Aby", "Alan", "Alondra", "Alexa", "Alexa Sarai", "Camila", "Carlos",
+            "Claudia", "Cristina", "Daniel", "Danna", "Denisse", "Isaí",
+            "Joaquín", "Josué", "Juan Carlos", "Karla", "Liz", "Mauricio",
+            "Ramón", "Raquel", "Rebeca", "Robert", "Sara", "Sinddy", "Yadira"
+        ];
+
+
+        const timelineContainer = document.getElementById('timelineContainer');
+        let currentFilteredTeacher = '';
+        let currentSelectedMonth = 'Todos';
+        let currentSelectedRoom = 'all';
+
+        function selectMonth(monthName) {
+            currentSelectedMonth = monthName;
+
+            // Update active state in month cards
+            document.querySelectorAll('.month-card').forEach(card => {
+                if (card.getAttribute('data-month') === monthName) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+
+            renderTimeline();
+
+            // Update dashboard statistics in real-time
+            if (currentFilteredTeacher) {
+                renderTeacherDashboard(currentFilteredTeacher);
+            }
+
+            // Smoothly scroll down to the timeline container
+            setTimeout(() => {
+                const container = document.getElementById('timelineContainer');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+
+        function selectRoom(roomId) {
+            currentSelectedRoom = roomId;
+
+            // Update active state in room buttons
+            document.querySelectorAll('.room-btn').forEach(btn => {
+                if (btn.getAttribute('data-room') === roomId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            applyFilters();
+        }
+
+        // Dynamically render timeline
+        function renderTimeline() {
+            timelineContainer.innerHTML = '';
+
+            // Filter scheduleData based on the selected month
+            let filteredWeeks = scheduleData;
+
+            if (currentSelectedMonth !== 'Todos') {
+                filteredWeeks = scheduleData.filter(week => {
+                    return week.date.toLowerCase().includes(currentSelectedMonth.toLowerCase());
+                });
+            }
+
+            if (filteredWeeks.length === 0 && currentSelectedMonth !== 'Todos') {
+                // If it's an empty month (Agosto, Septiembre, etc.)
+                const emptyBlock = document.createElement('div');
+                emptyBlock.className = 'coming-soon-card';
+                emptyBlock.innerHTML = `
+                    <div class="coming-soon-icon">⏳</div>
+                    <div class="coming-soon-title">Rol de ${currentSelectedMonth} 2026 en Planeación</div>
+                    <div class="coming-soon-desc">El rol de maestros para este mes aún está siendo coordinado con los directores y coordinadores de apoyo. ¡Próximamente estará disponible!</div>
+                `;
+                timelineContainer.appendChild(emptyBlock);
+                return;
+            }
+
+            filteredWeeks.forEach((week, weekIndex) => {
+                const originalIndex = scheduleData.indexOf(week);
+                const weekBlock = document.createElement('div');
+                weekBlock.className = `week-block ${week.status}`;
+                weekBlock.id = `week-${originalIndex}`;
+                weekBlock.style.animationDelay = `${weekIndex * 0.05}s`;
+
+                // Badge class
+                let badgeClass = 'badge-next';
+                if (week.status === 'past') badgeClass = 'badge-past';
+                if (week.status === 'suspended') badgeClass = 'badge-suspended';
+
+                // Week header HTML
+                let headerHtml = `
+                    <div class="week-header">
+                        <div class="week-date">
+                            📅 ${week.date} 
+                            <span class="state-badge ${badgeClass}">${week.badgeText}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                            <div class="week-theme">${week.theme}</div>
+                        </div>
+                    </div>
+                `;
+
+                if (week.status === 'suspended') {
+                    weekBlock.innerHTML = headerHtml + `
+                        <div class="suspended-content">
+                            <div class="suspended-title">🚫 Sesión Suspendida</div>
+                            <div class="suspended-desc">Este domingo no habrá clases programadas debido a la suspensión general. Las actividades y lecciones se recorren una semana hacia adelante a partir de este domingo.</div>
+                        </div>
+                    `;
+                } else {
+                    let groupsHtml = `<div class="groups-grid">`;
+
+                    const groupInfos = {
+                        "3-5": { name: "3 a 5 años", age: "👶 Párvulos", room: "Primaria A", cssClass: "g-3-5", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
+                        "6-8": { name: "6 a 8 años", age: "👧 Primaria A", room: "Primaria A", cssClass: "g-6-8", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
+                        "9-11": { name: "9 a 11 años", age: "👦 Primaria B", room: "Primaria B", cssClass: "g-9-11", url: "https://drive.google.com/drive/folders/1XdLXbrPqR_I-9ibbIZppEnU2UMRLz65j" },
+                        "jv12": { name: "JV 12", age: "🎓 Pre-adolescentes", room: "Pre-adolescentes", cssClass: "g-jv12", url: "https://drive.google.com/drive/folders/1cFyxxvBvxgcWTvmt5h1HdizNw-HnxF4q" }
+                    };
+
+                    Object.keys(week.classes).forEach(groupId => {
+                        const classData = week.classes[groupId];
+                        const groupInfo = groupInfos[groupId];
+
+                        // Parse date for circle badge: date is e.g. "14 de Junio"
+                        const dateParts = week.date.split(' ');
+                        const dayNum = dateParts[0] || '??';
+                        const monthAbbr = (dateParts[2] || '').substring(0, 3).toUpperCase();
+
+                        groupsHtml += `
+                            <div class="lesson-detail-card ${groupInfo.cssClass}" data-group="${groupId}">
+                                <!-- Circular Floating Date Bubble with Day and Month -->
+                                <div class="circle-date-badge">
+                                    <span class="circle-date-day">${dayNum}</span>
+                                    <span class="circle-date-month">${monthAbbr}</span>
+                                </div>
+                                
+                                <div class="card-date-label">🗓️ Domingo, ${week.date}</div>
+                                
+                                <a href="${groupInfo.url}" target="_blank" class="card-lesson-title" title="Ver material de esta clase">
+                                    ${week.theme}
+                                </a>
+                                
+                                <div class="card-capsules-row">
+                                    <span class="capsule-badge capsule-age-${groupId}">${groupInfo.age}</span>
+                                    <span class="capsule-badge capsule-room">🚪 ${groupInfo.room}</span>
+                                    <span class="capsule-badge capsule-status-badge">${week.status === 'past' ? '✅ COMPLETADO' : '🟢 PRÓXIMO'}</span>
+                                </div>
+                                
+                                <div class="card-role-row">
+                                    <div class="card-role-item role-lead" data-role="encargado" data-name="${classData.encargado}">
+                                        <span class="card-role-icon">🔨</span>
+                                        <span class="card-role-label">Encargado</span>
+                                        <span class="role-name">${classData.encargado}</span>
+                                    </div>
+                                    <div class="card-role-item role-support" data-role="apoyo" data-name="${classData.apoyo}">
+                                        <span class="card-role-icon">🤝</span>
+                                        <span class="card-role-label">Apoyo</span>
+                                        <span class="role-name">${classData.apoyo}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    groupsHtml += `</div>`;
+                    weekBlock.innerHTML = headerHtml + groupsHtml;
+                }
+
+                timelineContainer.appendChild(weekBlock);
+            });
+
+            applyFilters();
+        }
+
+        // Search filtering logic
+        function filterSchedule(teacherName) {
+            currentFilteredTeacher = teacherName;
+
+            const welcomeBanner = document.getElementById('welcomeBanner');
+            const timelineHeader = document.getElementById('timelineHeader');
+
+            if (!teacherName) {
+                welcomeBanner.style.display = 'none';
+                if (timelineHeader) {
+                    timelineHeader.style.display = 'none';
+                }
+                renderTeacherDashboard('');
+                applyFilters();
+                return;
+            }
+
+            const normalizedSearch = normalizeString(teacherName);
+            const matchedTeacher = teacherList.find(t => normalizeString(t) === normalizedSearch);
+            if (matchedTeacher) {
+                localStorage.setItem('preferredTeacher', matchedTeacher);
+
+                welcomeBanner.innerHTML = `
+                    <div class="welcome-text">
+                        <span>👋 ¡Hola, ${matchedTeacher}!</span> Bienvenido a tu Planner Dominical.
+                    </div>
+                    <div class="welcome-actions">
+                        <span class="welcome-badge">Vista Personalizada</span>
+                        <button class="change-user-btn" onclick="clearPreferredTeacher()">Cambiar de usuario</button>
+                    </div>
+                `;
+                welcomeBanner.style.display = 'flex';
+
+                if (timelineHeader) {
+                    timelineHeader.style.display = 'flex';
+                }
+            }
+
+            renderTeacherDashboard(teacherName);
+            applyFilters();
+        }
+
+        let showOthersDates = false;
+
+        function toggleOthersDates(checked) {
+            showOthersDates = checked;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchValue = currentFilteredTeacher || '';
+            const normalizedSearch = normalizeString(searchValue);
+            const hasTeacherFilter = !!searchValue;
+            const isJoaquin = (normalizedSearch === 'joaquin');
+
+            // Show or hide timelineHeader dynamically, and hide toggle switch container for Joaquin
+            const timelineHeader = document.getElementById('timelineHeader');
+            if (timelineHeader) {
+                timelineHeader.style.display = hasTeacherFilter ? 'flex' : 'none';
+                
+                const toggleContainer = timelineHeader.querySelector('.toggle-container');
+                if (toggleContainer) {
+                    toggleContainer.style.display = isJoaquin ? 'none' : 'flex';
+                }
+            }
+
+            // Loop through all rendered weeks in the UI
+            scheduleData.forEach((week, weekIndex) => {
+                const weekBlockElement = document.getElementById(`week-${weekIndex}`);
+                if (!weekBlockElement) return; // Skip if week is not rendered in current view
+
+                if (week.status === 'suspended') {
+                    if (!hasTeacherFilter || isJoaquin) {
+                        weekBlockElement.style.display = (currentSelectedRoom === 'all') ? 'block' : 'none';
+                        weekBlockElement.classList.remove('dimmed-week');
+                    } else if (hasTeacherFilter && showOthersDates) {
+                        weekBlockElement.style.display = (currentSelectedRoom === 'all') ? 'block' : 'none';
+                        weekBlockElement.classList.add('dimmed-week');
+                    } else {
+                        weekBlockElement.style.display = 'none';
+                        weekBlockElement.classList.add('dimmed-week');
+                    }
+                    return;
+                }
+
+                let weekHasTeacherMatch = false;
+
+                if (week.classes) {
+                    const cards = weekBlockElement.querySelectorAll('.lesson-detail-card');
+
+                    cards.forEach(card => {
+                        let cardHasTeacher = false;
+                        const cardGroupId = card.getAttribute('data-group');
+                        const roles = card.querySelectorAll('.card-role-item');
+
+                        roles.forEach(role => {
+                            const name = role.getAttribute('data-name');
+                            if (hasTeacherFilter && normalizeString(name) === normalizedSearch) {
+                                cardHasTeacher = true;
+                                weekHasTeacherMatch = true;
+                                role.classList.add('highlighted-role');
+                            } else {
+                                role.classList.remove('highlighted-role');
+                            }
+                        });
+
+                        // Check classroom room filter
+                        const matchesRoom = (currentSelectedRoom === 'all' || cardGroupId === currentSelectedRoom);
+
+                        // Decide whether to show card and how to style it
+                        let shouldShowCard = false;
+
+                        if (hasTeacherFilter && !isJoaquin) {
+                            if (showOthersDates) {
+                                shouldShowCard = matchesRoom;
+                                if (cardHasTeacher) {
+                                    card.classList.add('highlighted-card');
+                                    card.classList.remove('dimmed-card');
+                                } else {
+                                    card.classList.remove('highlighted-card');
+                                    card.classList.add('dimmed-card');
+                                }
+                            } else {
+                                shouldShowCard = cardHasTeacher && matchesRoom;
+                                card.classList.remove('highlighted-card', 'dimmed-card');
+                            }
+                        } else {
+                            // General view, or Joaquin's coordinator view: show all cards matching room filter
+                            shouldShowCard = matchesRoom;
+                            if (isJoaquin && cardHasTeacher) {
+                                card.classList.add('highlighted-card');
+                                card.classList.remove('dimmed-card');
+                            } else {
+                                card.classList.remove('highlighted-card', 'dimmed-card');
+                            }
+                        }
+
+                        card.style.display = shouldShowCard ? 'block' : 'none';
+                    });
+                }
+
+                // Count visible cards
+                let visibleCardsCount = 0;
+                if (week.classes) {
+                    const cards = weekBlockElement.querySelectorAll('.lesson-detail-card');
+                    cards.forEach(card => {
+                        if (card.style.display === 'block') {
+                            visibleCardsCount++;
+                        }
+                    });
+                }
+
+                // Decide whether to show week block
+                let shouldShowWeek = false;
+
+                if (hasTeacherFilter && !isJoaquin) {
+                    if (showOthersDates) {
+                        shouldShowWeek = (currentSelectedRoom === 'all' || visibleCardsCount > 0);
+                        if (weekHasTeacherMatch) {
+                            weekBlockElement.classList.remove('dimmed-week');
+                        } else {
+                            weekBlockElement.classList.add('dimmed-week');
+                        }
+                    } else {
+                        shouldShowWeek = (visibleCardsCount > 0);
+                        weekBlockElement.classList.remove('dimmed-week');
+                    }
+                } else {
+                    // General view, or Joaquin's coordinator view: show if room matches
+                    shouldShowWeek = (currentSelectedRoom === 'all' || visibleCardsCount > 0);
+                    weekBlockElement.classList.remove('dimmed-week');
+                }
+
+                weekBlockElement.style.display = shouldShowWeek ? 'block' : 'none';
+            });
+        }
+
+        // String helper
+        function normalizeString(str) {
+            if (!str) return '';
+            return str.toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim();
+        }
+
+        let loginSkipped = false;
+
+        // Teacher Detection and Welcome Banner Logic
+        function detectTeacher() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let teacherName = urlParams.get('maestro') || urlParams.get('m');
+
+            if (teacherName) {
+                const matchedTeacher = teacherList.find(t => normalizeString(t) === normalizeString(teacherName));
+                if (matchedTeacher) {
+                    localStorage.setItem('preferredTeacher', matchedTeacher);
+                    teacherName = matchedTeacher;
+                } else {
+                    teacherName = null;
+                }
+            } else {
+                teacherName = localStorage.getItem('preferredTeacher');
+            }
+
+            const welcomeBanner = document.getElementById('welcomeBanner');
+            const timelineHeader = document.getElementById('timelineHeader');
+
+            if (teacherName) {
+                document.getElementById('loginModal').style.display = 'none';
+
+                welcomeBanner.innerHTML = `
+                    <div class="welcome-text">
+                        <span>👋 ¡Hola, ${teacherName}!</span> Bienvenido a tu Planner Dominical.
+                    </div>
+                    <div class="welcome-actions">
+                        <span class="welcome-badge">Vista Personalizada</span>
+                        <button class="change-user-btn" onclick="clearPreferredTeacher()">Cambiar de usuario</button>
+                    </div>
+                `;
+                welcomeBanner.style.display = 'flex';
+
+                if (timelineHeader) {
+                    timelineHeader.style.display = 'flex';
+                }
+
+                filterSchedule(teacherName);
+            } else {
+                welcomeBanner.style.display = 'none';
+
+                if (timelineHeader) {
+                    timelineHeader.style.display = 'none';
+                }
+
+                if (!urlParams.get('maestro') && !urlParams.get('m') && !loginSkipped) {
+                    document.getElementById('loginModal').style.display = 'flex';
+                }
+            }
+        }
+
+        function clearPreferredTeacher() {
+            localStorage.removeItem('preferredTeacher');
+
+            // Clean URL query parameters
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+
+            // Reset state variables
+            currentFilteredTeacher = '';
+            showOthersDates = false;
+            loginSkipped = false;
+            currentSelectedRoom = 'all';
+
+            // Reset UI toggles & room filters
+            const toggle = document.getElementById('showOthersToggle');
+            if (toggle) toggle.checked = false;
+
+            document.querySelectorAll('.room-btn').forEach(btn => {
+                if (btn.getAttribute('data-room') === 'all') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Hide welcome banner and timeline header
+            document.getElementById('welcomeBanner').style.display = 'none';
+            document.getElementById('timelineHeader').style.display = 'none';
+
+            // Reset login modal elements to their initial state
+            const selectElem = document.getElementById('loginTeacherSelect');
+            if (selectElem) selectElem.value = "";
+
+            const confirmBtn = document.getElementById('loginConfirmBtn');
+            if (confirmBtn) confirmBtn.disabled = true;
+
+            // Show the login modal again!
+            document.getElementById('loginModal').style.display = 'flex';
+
+            // Clear dashboard
+            renderTeacherDashboard('');
+
+            // Re-apply filters
+            filterSchedule('');
+
+            // Scroll smoothly back to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function confirmLogin() {
+            const selectedTeacher = document.getElementById('loginTeacherSelect').value;
+            if (selectedTeacher) {
+                localStorage.setItem('preferredTeacher', selectedTeacher);
+                document.getElementById('loginModal').style.display = 'none';
+                detectTeacher();
+
+                // Smoothly scroll down to month cards
+                setTimeout(() => {
+                    const selector = document.querySelector('.month-selector-grid');
+                    if (selector) {
+                        selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
+            }
+        }
+
+        function skipLogin() {
+            loginSkipped = true;
+            document.getElementById('loginModal').style.display = 'none';
+            detectTeacher();
+
+            // Smoothly scroll down to month cards
+            setTimeout(() => {
+                const selector = document.querySelector('.month-selector-grid');
+                if (selector) {
+                    selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+
+        // --- Profile Photo Upload Functions ---
+        function triggerDashboardPhotoUpload() {
+            const fileInput = document.getElementById('dashboardPhotoInput');
+            if (fileInput) {
+                fileInput.click();
+            }
+        }
+
+        function uploadDashboardPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Enforce size limit (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert("La foto es muy grande. Elige una de menos de 2MB para asegurar una carga ultra-rápida.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const base64Data = e.target.result;
+                const currentTeacher = localStorage.getItem('preferredTeacher') || currentFilteredTeacher;
+                if (currentTeacher) {
+                    localStorage.setItem('profilePhoto_' + currentTeacher, base64Data);
+                    renderTeacherDashboard(currentTeacher);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeProfilePhoto(teacherName) {
+            if (confirm("¿Estás seguro de que quieres eliminar tu foto de perfil?")) {
+                localStorage.removeItem('profilePhoto_' + teacherName);
+                renderTeacherDashboard(teacherName);
+            }
+        }
+
+        // --- Personalized Summary Dashboard Render Function ---
+        function renderTeacherDashboard(teacherName) {
+            const dashboard = document.getElementById('teacherDashboard');
+            if (!dashboard) return;
+
+            if (!teacherName) {
+                dashboard.style.display = 'none';
+                dashboard.innerHTML = '';
+                return;
+            }
+
+            const normalizedSearch = normalizeString(teacherName);
+
+            // Calculate stats
+            let totalClasses = 0;
+            let classesThisMonth = 0;
+            let upcomingLessons = [];
+            let agendaListHtml = '';
+
+            // Get current active month name
+            const activeMonthCard = document.querySelector('.month-card.active');
+            const activeMonth = activeMonthCard ? activeMonthCard.getAttribute('data-month') : 'Todos';
+
+            scheduleData.forEach(week => {
+                if (!week.classes) return;
+
+                let userHasClassThisWeek = false;
+                let userRoleThisWeek = '';
+
+                Object.keys(week.classes).forEach(groupId => {
+                    const c = week.classes[groupId];
+                    if (normalizeString(c.encargado) === normalizedSearch || normalizeString(c.apoyo) === normalizedSearch) {
+                        totalClasses++;
+                        userHasClassThisWeek = true;
+                        userRoleThisWeek = (normalizeString(c.encargado) === normalizedSearch) ? 'lead' : 'support';
+
+                        // Calculate classes in active month
+                        if (activeMonth === 'Todos' || week.date.toLowerCase().includes(activeMonth.toLowerCase())) {
+                            classesThisMonth++;
+                        }
+
+                        // Collect upcoming lessons
+                        if (week.status === 'current') {
+                            upcomingLessons.push(week.theme.replace(/^[^\w\s]+/, '').trim());
+
+                            const roleText = userRoleThisWeek === 'lead' ? 'Encargado' : 'Apoyo';
+                            const roleClass = userRoleThisWeek;
+
+                            agendaListHtml += `
+                                <div class="dashboard-agenda-item">
+                                    <div class="agenda-date">
+                                        <span>📅 ${week.date}</span>
+                                        <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">${week.theme}</span>
+                                    </div>
+                                    <span class="agenda-role-lbl ${roleClass}">${roleText}</span>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+            });
+
+            // Fallback for upcoming lessons string
+            const lessonsSummaryStr = upcomingLessons.length > 0
+                ? upcomingLessons.slice(0, 2).join(', ')
+                : 'Sin lecciones próximas';
+
+            // Get initials for avatar
+            const initials = teacherName.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+            // Check if user has uploaded a custom profile photo
+            const savedPhoto = localStorage.getItem('profilePhoto_' + teacherName);
+            let avatarContent = '';
+            if (savedPhoto) {
+                avatarContent = `<img src="${savedPhoto}" alt="Foto de perfil" style="width: 100%; height: 100%; object-fit: cover;" />`;
+            } else {
+                avatarContent = `<span class="avatar-initials">${initials}</span>`;
+            }
+
+            // Populate dashboard HTML
+            dashboard.innerHTML = `
+                <div class="teacher-dashboard-card">
+                    <!-- Profile Section -->
+                    <div class="dashboard-user-profile">
+                        <div class="avatar-container" onclick="triggerDashboardPhotoUpload()" style="cursor: pointer;" title="Haz clic para subir tu foto de perfil">
+                            ${avatarContent}
+                            <div class="avatar-upload-overlay">
+                                <span>📷</span>
+                            </div>
+                        </div>
+                        <h3 class="dashboard-username">${teacherName}</h3>
+                        ${savedPhoto ? `<button onclick="removeProfilePhoto('${teacherName}')" style="background: none; border: none; color: var(--text-muted); font-size: 0.75rem; text-decoration: underline; cursor: pointer; margin-top: -0.25rem;">Eliminar foto</button>` : ''}
+                    </div>
+
+                    <!-- Metrics Grid 2x2 -->
+                    <div class="dashboard-metrics-grid">
+                        <div class="metric-box" title="Clases programadas en el mes seleccionado">
+                            <span class="metric-val">${classesThisMonth}</span>
+                            <span class="metric-lbl">Clases Este Mes</span>
+                        </div>
+                        <div class="metric-box" title="Total de clases asignadas en el trimestre">
+                            <span class="metric-val">${totalClasses}</span>
+                            <span class="metric-lbl">Clases Totales</span>
+                        </div>
+                        
+                        <!-- Next Lessons large widget -->
+                        <div class="metric-large-box">
+                            <span class="metric-large-title">📖 Mis Temas Próximos</span>
+                            <span class="metric-large-desc">${lessonsSummaryStr}</span>
+                        </div>
+                    </div>
+
+                    <!-- Focused Agenda Title & List -->
+                    <div class="dashboard-agenda-title">🗓️ Mis Próximas Fechas</div>
+                    <div class="dashboard-agenda-list">
+                        ${agendaListHtml || '<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 1rem 0;">No tienes clases próximas programadas.</div>'}
+                    </div>
+                </div>
+            `;
+
+            dashboard.style.display = 'block';
+        }
+
+        // Initialize background theme on startup
+        function initBackground() {
+            const savedBg = localStorage.getItem('preferredBackground') || 'dark';
+            changeBackground(savedBg);
+        }
+
+        // Populate login modal teacher dropdown options
+        const loginSelect = document.getElementById('loginTeacherSelect');
+        if (loginSelect) {
+            teacherList.forEach(teacher => {
+                const opt = document.createElement('option');
+                opt.value = teacher;
+                opt.innerText = teacher;
+                loginSelect.appendChild(opt);
+            });
+
+            loginSelect.addEventListener('change', () => {
+                const confirmBtn = document.getElementById('loginConfirmBtn');
+                if (confirmBtn) confirmBtn.disabled = false;
+            });
+        }
+
+        // Hamburger Drawer Control Functions
+        function toggleMenu() {
+            const btn = document.getElementById('menuToggleBtn');
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+
+            if (btn && drawer && overlay) {
+                btn.classList.toggle('open');
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('open');
+            }
+        }
+
+        function toggleRecursosMenu() {
+            const toggleItem = document.getElementById('recursosToggleItem');
+            const submenu = document.getElementById('recursosSubmenu');
+
+            if (toggleItem && submenu) {
+                toggleItem.classList.toggle('active-item');
+                submenu.classList.toggle('open');
+            }
+        }
+
+        function navigateToSection(sectionId) {
+            toggleMenu();
+
+            if (sectionId === 'roles') {
+                setTimeout(() => {
+                    const selector = document.querySelector('.month-selector-grid');
+                    if (selector) {
+                        selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            }
+        }
+
+        // Custom Background Picker Functions
+        function changeBackground(themeName) {
+            document.body.classList.remove('bg-theme-light', 'bg-theme-dark');
+            document.body.classList.add(`bg-theme-${themeName}`);
+            localStorage.setItem('preferredBackground', themeName);
+
+            document.querySelectorAll('.bg-chip').forEach(chip => {
+                if (chip.classList.contains(`bg-${themeName}`)) {
+                    chip.classList.add('active');
+                } else {
+                    chip.classList.remove('active');
+                }
+            });
+        }
+
+        // Start App
+        renderTimeline();
+        initBackground();
+        detectTeacher();
+    </script>
+</body>
+
+</html>
