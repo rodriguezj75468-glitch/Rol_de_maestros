@@ -1477,7 +1477,7 @@
         }
 
         .login-form-group::after {
-            content: "▼";
+            content: "?";
             font-size: 0.75rem;
             color: var(--text-muted);
             position: absolute;
@@ -2336,28 +2336,28 @@
     <!-- Slide-out Navigation Drawer -->
     <div id="navDrawer" class="nav-drawer">
         <div class="drawer-header">
-            <div class="drawer-title">📌 Menú</div>
+            <div class="drawer-title">☰ Menú</div>
             <button class="drawer-close-btn" onclick="toggleMenu()">&times;</button>
         </div>
         <div class="drawer-content">
             <!-- Option 1: Roles -->
             <div class="drawer-item" onclick="navigateToSection('roles')">
-                <span class="drawer-item-icon">🗓️</span>
-                <span class="drawer-item-text">1. Roles y Calendario</span>
+                <span class="drawer-item-icon">📆</span>
+                <span class="drawer-item-text">1. Roles y Cronograma</span>
             </div>
 
             <!-- Option 2: Recursos (Collapsible Dropdown) -->
             <div id="recursosToggleItem" class="drawer-item" onclick="toggleRecursosMenu()">
-                <span class="drawer-item-icon">📂</span>
+                <span class="drawer-item-icon">📚</span>
                 <span class="drawer-item-text">2. Recursos</span>
-                <span class="arrow-icon">▶</span>
+                <span class="arrow-icon">▼</span>
             </div>
 
             <!-- Collapsible Links -->
             <div id="recursosSubmenu" class="drawer-submenu">
                 <a href="https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f" target="_blank"
                     class="drawer-link-item">
-                    <span class="drawer-link-icon">📁</span>
+                    <span class="drawer-link-icon">📂</span>
                     <div class="drawer-link-info">
                         <span class="drawer-link-title">Carpeta General</span>
                         <span class="drawer-link-desc">Rol general y lecciones</span>
@@ -2403,9 +2403,9 @@
             </div>
 
             <!-- Option 4: Compartir -->
-            <div class="drawer-section-title">📤 Compartir</div>
+            <div class="drawer-section-title">🔗 Compartir</div>
             <div class="drawer-item" onclick="shareApp()" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; margin-top: 0.5rem; justify-content: center; cursor: pointer; transition: all 0.3s ease;">
-                <span class="drawer-item-icon">✨</span>
+                <span class="drawer-item-icon">📤</span>
                 <span class="drawer-item-text" style="color: #a5b4fc; font-weight: 700;">Compartir Planeador</span>
             </div>
         </div>
@@ -2436,10 +2436,12 @@
         </div>
     </div>
 
+    <!-- (Modal de ausencia eliminado ya que se redirige a la página dedicada de calendario) -->
+
     <!-- Login Modal (Who are you?) -->
     <div id="loginModal" class="login-modal" style="display: none;">
         <div class="login-modal-content">
-            <div class="login-logo">🗓️</div>
+            <div class="login-logo">🔐</div>
             <h2 class="login-title">Planner Dominical</h2>
             <p class="login-subtitle">Para darte una experiencia personalizada y mostrar tu agenda dominical, dinos
                 quién eres:</p>
@@ -2452,13 +2454,13 @@
 
             <button id="loginConfirmBtn" class="login-btn" onclick="confirmLogin()" disabled>Comenzar y Ver mi
                 Rol</button>
-            <button class="login-btn-secondary" onclick="skipLogin()">Ver todo el calendario general</button>
+            <button class="login-btn-secondary" onclick="skipLogin()">Ver todo el rol de clases</button>
         </div>
     </div>
 
     <header>
         <h1>Planner Dominical</h1>
-        <div class="subtitle">Roles y Temas de Clases Dominicales 🚀</div>
+        <div class="subtitle">Roles y Temas de Clases Dominicales 📅</div>
     </header>
 
     <!-- Welcome Banner Container -->
@@ -2470,21 +2472,21 @@
 
     <!-- Month Selector Grid -->
     <div class="month-selector-grid">
-        <div class="month-card active" data-month="Todos" onclick="selectMonth('Todos')">
-            <span class="month-lessons-badge">9</span>
+        <div class="month-card" data-month="Todos" onclick="selectMonth('Todos')">
+            <span class="month-lessons-badge">13</span>
             <span class="month-name">Todos</span>
         </div>
-        <div class="month-card" data-month="Mayo" onclick="selectMonth('Mayo')">
-            <span class="month-lessons-badge">2</span>
-            <span class="month-name">Mayo</span>
-        </div>
-        <div class="month-card" data-month="Junio" onclick="selectMonth('Junio')">
+        <div class="month-card active" data-month="Junio" onclick="selectMonth('Junio')">
             <span class="month-lessons-badge">4</span>
             <span class="month-name">Junio</span>
         </div>
         <div class="month-card" data-month="Julio" onclick="selectMonth('Julio')">
             <span class="month-lessons-badge">4</span>
             <span class="month-name">Julio</span>
+        </div>
+        <div class="month-card" data-month="Agosto" onclick="selectMonth('Agosto')">
+            <span class="month-lessons-badge">5</span>
+            <span class="month-name">Agosto</span>
         </div>
     </div>
 
@@ -2499,7 +2501,7 @@
 
             <div class="toggle-container"
                 style="display: flex; align-items: center; gap: 0.75rem; background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255,255,255,0.05); padding: 0.45rem 1rem; border-radius: 50px;">
-                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">👁️ Ver fechas de otros
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">👀 Ver fechas de otros
                     maestros</span>
                 <label class="switch"
                     style="position: relative; display: inline-block; width: 40px; height: 22px; margin: 0;">
@@ -2515,7 +2517,7 @@
         <div class="room-filter-container"
             style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.75rem;">
             <span
-                style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700; font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 0.5rem;">🏫
+                style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700; font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 0.5rem;">🔍
                 Filtrar por Aula:</span>
             <button class="room-btn active" data-room="all" onclick="selectRoom('all')">Todas</button>
             <button class="room-btn room-3-5" data-room="3-5" onclick="selectRoom('3-5')">👶 3 a 5 años</button>
@@ -2535,206 +2537,252 @@
     </div>
 
     <script>
-        // Full shifted schedule database
+        // --- 🔐 SISTEMA DE PERFILES Y FEEDBACK SIMULADO ---
+        const teacherProfiles = {
+            "Aby": { pass: "Aby2026!", feedback: "Excelente manejo de los niños, ¡sigue así!" },
+            "Alan": { pass: "Alan#Lider", feedback: "Muy buen liderazgo en las clases." },
+            "Alondra": { pass: "Alo*Domingo", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Alexa": { pass: "Alexa26$", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Alexa Sarai": { pass: "Sarai#Kids", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Camila": { pass: "Cami@2026", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Carlos": { pass: "Carlos#Apoyo", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Cristina": { pass: "Cris*Equipo", feedback: "Haces un gran equipo con Mauricio y Daniel. Muy buenas dinámicas." },
+            "Daniel": { pass: "Dani@Apoyo", feedback: "Excelente apoyo logístico." },
+            "Danna": { pass: "Danna#2026", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Denisse": { pass: "Deni!Clase", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Isaí": { pass: "Isai*26", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Joaquín": { pass: "Joaquin@Dom", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Juan Carlos": { pass: "JuanC!2026", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Karla": { pass: "Karla$Kids", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Liz": { pass: "Liz*Domingo", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Mauricio": { pass: "Mauri#2026", feedback: "Tus clases son muy interactivas, sigue así." },
+            "Rebeca": { pass: "Rebe*Peques", feedback: "Gracias por unirte a los más pequeñitos como apoyo. Tu paciencia es clave." },
+            "Sinddy": { pass: "Sinddy*Dom", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            "Yadira": { pass: "Yadira@2026", feedback: "Gracias por tu servicio y dedicación en las clases." },
+            
+            // Perfiles combinados de esposos
+            "Robert y Sara": { 
+                pass: ["Robert#26", "Sara$JV12"], 
+                feedback: "Robert: Gracias por avisar de sus ausencias en junio con anticipación. / Sara: Gracias por tu servicio y dedicación en las clases." 
+            },
+            "Josué y Raquel": { 
+                pass: ["Josue#JV12", "Raquel!JV12"], 
+                feedback: "Josué y Raquel: Gracias por tu servicio y dedicación en las clases." 
+            },
+            "Ramón y Claudia": { 
+                pass: ["Ramon@Clase", "Clau!Kids"], 
+                feedback: "Ramón y Claudia: Gracias por tu servicio y dedicación en las clases." 
+            }
+        };
+
+        function checkPassword(profile, inputPass) {
+            if (!profile) return false;
+            if (Array.isArray(profile.pass)) {
+                return profile.pass.includes(inputPass);
+            }
+            return profile.pass === inputPass;
+        }
+
+        function matchTeacherName(teacherName, filterValue) {
+            if (!teacherName || !filterValue) return false;
+            const normTeacher = normalizeString(teacherName);
+            const normFilter = normalizeString(filterValue);
+            
+            if (normFilter.includes(" y ") || normFilter.includes(" & ")) {
+                const parts = normFilter.split(/ y | & /);
+                return parts.some(part => part.trim() === normTeacher);
+            }
+            if (normTeacher.includes(" y ") || normTeacher.includes(" & ")) {
+                const parts = normTeacher.split(/ y | & /);
+                return parts.some(part => part.trim() === normFilter);
+            }
+            return normTeacher === normFilter;
+        }
+
+        function reportAbsence(teacherName) {
+            const adminPhone = "5215555555555"; // Teléfono real del administrador
+            const message = `Hola, soy ${teacherName}. Solicito un cambio o apoyo porque NO podré asistir a mi próxima clase dominical programada.`;
+            const url = `https://api.whatsapp.com/send?phone=${adminPhone}&text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // --- 📅 BASE DE DATOS DE ROLES ACTUALIZADA ---
         const scheduleData = [
             {
-                date: "24 de Mayo",
-                theme: "✨ Lección 3: José en Egipto",
-                status: "past", // past, suspended, current
-                badgeText: "Completado",
+                date: "07 de Junio", theme: "🚀 Lección 4: Débora", status: "past", badgeText: "Completado",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
-                    "3-5": { encargado: "Danna", apoyo: "Denisse" },
-                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
-                    "9-11": { encargado: "Alan", apoyo: "Isaí" },
-                    "jv12": { encargado: "Robert", apoyo: "Sara" }
-                }
-            },
-            {
-                date: "31 de Mayo",
-                theme: "🚫 Cierre de Ayuno",
-                status: "suspended",
-                badgeText: "Sin Clase",
-                classes: null
-            },
-            {
-                date: "07 de Junio",
-                theme: "🚀 Lección 4: Débora",
-                status: "current",
-                badgeText: "Próximo",
-                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
-                classes: {
-                    "3-5": { encargado: "Aby", apoyo: "Alondra" },
-                    "6-8": { encargado: "Sinddy", apoyo: "Denisse" },
-                    "9-11": { encargado: "Daniel", apoyo: "Rebeca" },
+                    "3-5": { encargado: "Alondra", apoyo: "Rebeca" }, 
+                    "6-8": { encargado: "Aby", apoyo: "Denisse" },
+                    "9-11": { encargado: "Daniel", apoyo: "Cristina" },
                     "jv12": { encargado: "Ramón", apoyo: "Claudia" }
                 }
             },
             {
-                date: "14 de Junio",
-                theme: "💡 Lección 5: Daniel y la obediencia",
-                status: "current",
-                badgeText: "Próximo",
+                date: "14 de Junio", theme: "💡 Lección 5: Daniel y la obediencia", status: "past", badgeText: "Completado",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
                     "3-5": { encargado: "Alexa", apoyo: "Yadira" },
                     "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
-                    "9-11": { encargado: "Joaquín", apoyo: "Mauricio" },
+                    "9-11": { encargado: "Mauricio", apoyo: "Cristina" },
                     "jv12": { encargado: "Josué", apoyo: "Raquel" }
                 }
             },
             {
-                date: "21 de Junio",
-                theme: "🔥 Lección 6: Ester",
-                status: "current",
-                badgeText: "Próximo",
+                date: "21 de Junio", theme: "🔥 Lección 6: Ester", status: "past", badgeText: "Completado",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
-                    "3-5": { encargado: "Liz", apoyo: "Camila" },
+                    "3-5": { encargado: "Liz", apoyo: "Rebeca" },
                     "6-8": { encargado: "Ramón", apoyo: "Claudia" },
-                    "9-11": { encargado: "Alan", apoyo: "Rebeca" },
+                    "9-11": { encargado: "Juan Carlos", apoyo: "Isaí" },
+                    "jv12": { encargado: "Por asignar", apoyo: "Por asignar" }
+                }
+            },
+            {
+                date: "28 de Junio", theme: "⭐ Lección 7: Esteban enfrenta a la muerte", status: "current", badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Danna", apoyo: "Alondra" },
+                    "6-8": { encargado: "Sinddy", apoyo: "Carlos" },
+                    "9-11": { encargado: "Joaquín", apoyo: "Isaí" },
+                    "jv12": { encargado: "Josué", apoyo: "Raquel" }
+                }
+            },
+            {
+                date: "05 de Julio", theme: "🌟 Lección 8: Pablo en Filipos", status: "current", badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Alexa", apoyo: "Rebeca" },
+                    "6-8": { encargado: "Aby", apoyo: "Denisse" },
+                    "9-11": { encargado: "Alan", apoyo: "Mauricio" },
                     "jv12": { encargado: "Robert", apoyo: "Sara" }
                 }
             },
             {
-                date: "28 de Junio",
-                theme: "⭐ Lección 7: Esteban enfrenta a la muerte",
-                status: "current",
-                badgeText: "Próximo",
+                date: "12 de Julio", theme: "✨ Lección 9", status: "current", badgeText: "Próximo",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
-                    "3-5": { encargado: "Alexa", apoyo: "Alondra" },
-                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
-                    "9-11": { encargado: "Daniel", apoyo: "Mauricio" },
+                    "3-5": { encargado: "Liz", apoyo: "Yadira" },
+                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
+                    "9-11": { encargado: "Daniel", apoyo: "Cristina" },
                     "jv12": { encargado: "Ramón", apoyo: "Claudia" }
                 }
             },
             {
-                date: "05 de Julio",
-                theme: "🌟 Lección 8: Pablo en Filipos",
-                status: "current",
-                badgeText: "Próximo",
+                date: "19 de Julio", theme: "🌈 Lección 10", status: "current", badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Danna", apoyo: "Rebeca" },
+                    "6-8": { encargado: "Aby", apoyo: "Denisse" },
+                    "9-11": { encargado: "Joaquín", apoyo: "Isaí" },
+                    "jv12": { encargado: "Sinddy", apoyo: "Juan Carlos" }
+                }
+            },
+            {
+                date: "26 de Julio", theme: "⚔️ Lección 11", status: "current", badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Alexa", apoyo: "Yadira" },
+                    "6-8": { encargado: "Ramón", apoyo: "Claudia" },
+                    "9-11": { encargado: "Cristina", apoyo: "Mauricio" },
+                    "jv12": { encargado: "Josué", apoyo: "Raquel" }
+                }
+            },
+            {
+                date: "02 de Agosto", theme: "📖 Lección 12", status: "current", badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Liz", apoyo: "Rebeca" },
+                    "6-8": { encargado: "Sinddy", apoyo: "Carlos" },
+                    "9-11": { encargado: "Alan", apoyo: "Juan Carlos" },
+                    "jv12": { encargado: "Robert", apoyo: "Sara" }
+                }
+            },
+            {
+                date: "09 de Agosto", theme: "🛡️ Lección 13", status: "current", badgeText: "Próximo",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
                     "3-5": { encargado: "Danna", apoyo: "Yadira" },
-                    "6-8": { encargado: "Sinddy", apoyo: "Denisse" },
-                    "9-11": { encargado: "Joaquín", apoyo: "Cristina" },
-                    "jv12": { encargado: "Robert", apoyo: "Sara" }
-                }
-            },
-            {
-                date: "12 de Julio",
-                theme: "✨ Lección 9",
-                status: "current",
-                badgeText: "Próximo",
-                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
-                classes: {
-                    "3-5": { encargado: "Aby", apoyo: "Denisse" },
-                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
-                    "9-11": { encargado: "Alan", apoyo: "Rebeca" },
+                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
+                    "9-11": { encargado: "Daniel", apoyo: "Cristina" },
                     "jv12": { encargado: "Ramón", apoyo: "Claudia" }
                 }
             },
             {
-                date: "19 de Julio",
-                theme: "🌈 Lección 10",
-                status: "current",
-                badgeText: "Próximo",
+                date: "16 de Agosto", theme: "🧭 Lección 14", status: "current", badgeText: "Próximo",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
-                    "3-5": { encargado: "Alexa", apoyo: "Alexa Sarai" },
-                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
-                    "9-11": { encargado: "Daniel", apoyo: "Mauricio" },
+                    "3-5": { encargado: "Alexa", apoyo: "Alondra" },
+                    "6-8": { encargado: "Aby", apoyo: "Denisse" },
+                    "9-11": { encargado: "Alan", apoyo: "Mauricio" },
+                    "jv12": { encargado: "Josué", apoyo: "Raquel" }
+                }
+            },
+            {
+                date: "23 de Agosto", theme: "⚓ Lección 15", status: "current", badgeText: "Próximo",
+                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
+                classes: {
+                    "3-5": { encargado: "Liz", apoyo: "Alondra" },
+                    "6-8": { encargado: "Sinddy", apoyo: "Carlos" },
+                    "9-11": { encargado: "Joaquín", apoyo: "Isaí" },
                     "jv12": { encargado: "Robert", apoyo: "Sara" }
                 }
             },
             {
-                date: "26 de Julio",
-                theme: "⚔️ Lección 11",
-                status: "current",
-                badgeText: "Próximo",
+                date: "30 de Agosto", theme: "🎯 Lección 16", status: "current", badgeText: "Próximo",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
                 classes: {
-                    "3-5": { encargado: "Liz", apoyo: "Camila" },
-                    "6-8": { encargado: "Por asignar", apoyo: "Carlos" },
-                    "9-11": { encargado: "Joaquín", apoyo: "Cristina" },
+                    "3-5": { encargado: "Danna", apoyo: "Rebeca" },
+                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
+                    "9-11": { encargado: "Daniel", apoyo: "Cristina" },
                     "jv12": { encargado: "Ramón", apoyo: "Claudia" }
                 }
             }
         ];
 
-        // Unique teacher names sorted alphabetically
         const teacherList = [
             "Aby", "Alan", "Alondra", "Alexa", "Alexa Sarai", "Camila", "Carlos",
-            "Claudia", "Cristina", "Daniel", "Danna", "Denisse", "Isaí",
-            "Joaquín", "Josué", "Juan Carlos", "Karla", "Liz", "Mauricio",
-            "Ramón", "Raquel", "Rebeca", "Robert", "Sara", "Sinddy", "Yadira"
+            "Cristina", "Daniel", "Danna", "Denisse", "Isaí",
+            "Joaquín", "Josué y Raquel", "Juan Carlos", "Karla", "Liz", "Mauricio",
+            "Ramón y Claudia", "Rebeca", "Robert y Sara", "Sinddy", "Yadira"
         ];
-
 
         const timelineContainer = document.getElementById('timelineContainer');
         let currentFilteredTeacher = '';
-        let currentSelectedMonth = 'Todos';
+        let currentSelectedMonth = 'Junio';
         let currentSelectedRoom = 'all';
 
         function selectMonth(monthName) {
             currentSelectedMonth = monthName;
-
-            // Update active state in month cards
             document.querySelectorAll('.month-card').forEach(card => {
-                if (card.getAttribute('data-month') === monthName) {
-                    card.classList.add('active');
-                } else {
-                    card.classList.remove('active');
-                }
+                if (card.getAttribute('data-month') === monthName) card.classList.add('active');
+                else card.classList.remove('active');
             });
-
             renderTimeline();
-
-            // Update dashboard statistics in real-time
-            if (currentFilteredTeacher) {
-                renderTeacherDashboard(currentFilteredTeacher);
-            }
-
-            // Smoothly scroll down to the timeline container
+            if (currentFilteredTeacher) renderTeacherDashboard(currentFilteredTeacher);
             setTimeout(() => {
                 const container = document.getElementById('timelineContainer');
-                if (container) {
-                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
         }
 
         function selectRoom(roomId) {
             currentSelectedRoom = roomId;
-
-            // Update active state in room buttons
             document.querySelectorAll('.room-btn').forEach(btn => {
-                if (btn.getAttribute('data-room') === roomId) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                if (btn.getAttribute('data-room') === roomId) btn.classList.add('active');
+                else btn.classList.remove('active');
             });
-
             applyFilters();
         }
 
-        // Dynamically render timeline
         function renderTimeline() {
             timelineContainer.innerHTML = '';
-
-            // Filter scheduleData based on the selected month
             let filteredWeeks = scheduleData;
-
             if (currentSelectedMonth !== 'Todos') {
-                filteredWeeks = scheduleData.filter(week => {
-                    return week.date.toLowerCase().includes(currentSelectedMonth.toLowerCase());
-                });
+                filteredWeeks = scheduleData.filter(week => week.date.toLowerCase().includes(currentSelectedMonth.toLowerCase()));
             }
 
             if (filteredWeeks.length === 0 && currentSelectedMonth !== 'Todos') {
-                // If it's an empty month (Agosto, Septiembre, etc.)
                 const emptyBlock = document.createElement('div');
                 emptyBlock.className = 'coming-soon-card';
                 emptyBlock.innerHTML = `
@@ -2753,12 +2801,10 @@
                 weekBlock.id = `week-${originalIndex}`;
                 weekBlock.style.animationDelay = `${weekIndex * 0.05}s`;
 
-                // Badge class
                 let badgeClass = 'badge-next';
                 if (week.status === 'past') badgeClass = 'badge-past';
                 if (week.status === 'suspended') badgeClass = 'badge-suspended';
 
-                // Week header HTML
                 let headerHtml = `
                     <div class="week-header">
                         <div class="week-date">
@@ -2780,7 +2826,6 @@
                     `;
                 } else {
                     let groupsHtml = `<div class="groups-grid">`;
-
                     const groupInfos = {
                         "3-5": { name: "3 a 5 años", age: "👶 Párvulos", room: "Primaria A", cssClass: "g-3-5", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
                         "6-8": { name: "6 a 8 años", age: "👧 Primaria A", room: "Primaria A", cssClass: "g-6-8", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
@@ -2791,32 +2836,23 @@
                     Object.keys(week.classes).forEach(groupId => {
                         const classData = week.classes[groupId];
                         const groupInfo = groupInfos[groupId];
-
-                        // Parse date for circle badge: date is e.g. "14 de Junio"
                         const dateParts = week.date.split(' ');
                         const dayNum = dateParts[0] || '??';
                         const monthAbbr = (dateParts[2] || '').substring(0, 3).toUpperCase();
 
                         groupsHtml += `
                             <div class="lesson-detail-card ${groupInfo.cssClass}" data-group="${groupId}">
-                                <!-- Circular Floating Date Bubble with Day and Month -->
                                 <div class="circle-date-badge">
                                     <span class="circle-date-day">${dayNum}</span>
                                     <span class="circle-date-month">${monthAbbr}</span>
                                 </div>
-                                
                                 <div class="card-date-label">🗓️ Domingo, ${week.date}</div>
-                                
-                                <a href="${groupInfo.url}" target="_blank" class="card-lesson-title" title="Ver material de esta clase">
-                                    ${week.theme}
-                                </a>
-                                
+                                <a href="${groupInfo.url}" target="_blank" class="card-lesson-title" title="Ver material de esta clase">${week.theme}</a>
                                 <div class="card-capsules-row">
                                     <span class="capsule-badge capsule-age-${groupId}">${groupInfo.age}</span>
                                     <span class="capsule-badge capsule-room">🚪 ${groupInfo.room}</span>
                                     <span class="capsule-badge capsule-status-badge">${week.status === 'past' ? '✅ COMPLETADO' : '🟢 PRÓXIMO'}</span>
                                 </div>
-                                
                                 <div class="card-role-row">
                                     <div class="card-role-item role-lead" data-role="encargado" data-name="${classData.encargado}">
                                         <span class="card-role-icon">🔨</span>
@@ -2832,29 +2868,22 @@
                             </div>
                         `;
                     });
-
                     groupsHtml += `</div>`;
                     weekBlock.innerHTML = headerHtml + groupsHtml;
                 }
-
                 timelineContainer.appendChild(weekBlock);
             });
-
             applyFilters();
         }
 
-        // Search filtering logic
         function filterSchedule(teacherName) {
             currentFilteredTeacher = teacherName;
-
             const welcomeBanner = document.getElementById('welcomeBanner');
             const timelineHeader = document.getElementById('timelineHeader');
 
             if (!teacherName) {
                 welcomeBanner.style.display = 'none';
-                if (timelineHeader) {
-                    timelineHeader.style.display = 'none';
-                }
+                if (timelineHeader) timelineHeader.style.display = 'none';
                 renderTeacherDashboard('');
                 applyFilters();
                 return;
@@ -2864,29 +2893,23 @@
             const matchedTeacher = teacherList.find(t => normalizeString(t) === normalizedSearch);
             if (matchedTeacher) {
                 localStorage.setItem('preferredTeacher', matchedTeacher);
-
                 welcomeBanner.innerHTML = `
                     <div class="welcome-text">
                         <span>👋 ¡Hola, ${matchedTeacher}!</span> Bienvenido a tu Planner Dominical.
                     </div>
                     <div class="welcome-actions">
                         <span class="welcome-badge">Vista Personalizada</span>
-                        <button class="change-user-btn" onclick="clearPreferredTeacher()">Cambiar de usuario</button>
+                        <button class="change-user-btn" onclick="clearPreferredTeacher()">Cerrar sesión</button>
                     </div>
                 `;
                 welcomeBanner.style.display = 'flex';
-
-                if (timelineHeader) {
-                    timelineHeader.style.display = 'flex';
-                }
+                if (timelineHeader) timelineHeader.style.display = 'flex';
             }
-
             renderTeacherDashboard(teacherName);
             applyFilters();
         }
 
         let showOthersDates = false;
-
         function toggleOthersDates(checked) {
             showOthersDates = checked;
             applyFilters();
@@ -2898,21 +2921,16 @@
             const hasTeacherFilter = !!searchValue;
             const isJoaquin = (normalizedSearch === 'joaquin');
 
-            // Show or hide timelineHeader dynamically, and hide toggle switch container for Joaquin
             const timelineHeader = document.getElementById('timelineHeader');
             if (timelineHeader) {
                 timelineHeader.style.display = hasTeacherFilter ? 'flex' : 'none';
-                
                 const toggleContainer = timelineHeader.querySelector('.toggle-container');
-                if (toggleContainer) {
-                    toggleContainer.style.display = isJoaquin ? 'none' : 'flex';
-                }
+                if (toggleContainer) toggleContainer.style.display = isJoaquin ? 'none' : 'flex';
             }
 
-            // Loop through all rendered weeks in the UI
             scheduleData.forEach((week, weekIndex) => {
                 const weekBlockElement = document.getElementById(`week-${weekIndex}`);
-                if (!weekBlockElement) return; // Skip if week is not rendered in current view
+                if (!weekBlockElement) return;
 
                 if (week.status === 'suspended') {
                     if (!hasTeacherFilter || isJoaquin) {
@@ -2929,10 +2947,8 @@
                 }
 
                 let weekHasTeacherMatch = false;
-
                 if (week.classes) {
                     const cards = weekBlockElement.querySelectorAll('.lesson-detail-card');
-
                     cards.forEach(card => {
                         let cardHasTeacher = false;
                         const cardGroupId = card.getAttribute('data-group');
@@ -2940,7 +2956,7 @@
 
                         roles.forEach(role => {
                             const name = role.getAttribute('data-name');
-                            if (hasTeacherFilter && normalizeString(name) === normalizedSearch) {
+                            if (hasTeacherFilter && matchTeacherName(name, searchValue)) {
                                 cardHasTeacher = true;
                                 weekHasTeacherMatch = true;
                                 role.classList.add('highlighted-role');
@@ -2949,10 +2965,7 @@
                             }
                         });
 
-                        // Check classroom room filter
                         const matchesRoom = (currentSelectedRoom === 'all' || cardGroupId === currentSelectedRoom);
-
-                        // Decide whether to show card and how to style it
                         let shouldShowCard = false;
 
                         if (hasTeacherFilter && !isJoaquin) {
@@ -2970,7 +2983,6 @@
                                 card.classList.remove('highlighted-card', 'dimmed-card');
                             }
                         } else {
-                            // General view, or Joaquin's coordinator view: show all cards matching room filter
                             shouldShowCard = matchesRoom;
                             if (isJoaquin && cardHasTeacher) {
                                 card.classList.add('highlighted-card');
@@ -2979,67 +2991,56 @@
                                 card.classList.remove('highlighted-card', 'dimmed-card');
                             }
                         }
-
                         card.style.display = shouldShowCard ? 'block' : 'none';
                     });
                 }
 
-                // Count visible cards
                 let visibleCardsCount = 0;
                 if (week.classes) {
                     const cards = weekBlockElement.querySelectorAll('.lesson-detail-card');
                     cards.forEach(card => {
-                        if (card.style.display === 'block') {
-                            visibleCardsCount++;
-                        }
+                        if (card.style.display === 'block') visibleCardsCount++;
                     });
                 }
 
-                // Decide whether to show week block
                 let shouldShowWeek = false;
-
                 if (hasTeacherFilter && !isJoaquin) {
                     if (showOthersDates) {
                         shouldShowWeek = (currentSelectedRoom === 'all' || visibleCardsCount > 0);
-                        if (weekHasTeacherMatch) {
-                            weekBlockElement.classList.remove('dimmed-week');
-                        } else {
-                            weekBlockElement.classList.add('dimmed-week');
-                        }
+                        if (weekHasTeacherMatch) weekBlockElement.classList.remove('dimmed-week');
+                        else weekBlockElement.classList.add('dimmed-week');
                     } else {
                         shouldShowWeek = (visibleCardsCount > 0);
                         weekBlockElement.classList.remove('dimmed-week');
                     }
                 } else {
-                    // General view, or Joaquin's coordinator view: show if room matches
                     shouldShowWeek = (currentSelectedRoom === 'all' || visibleCardsCount > 0);
                     weekBlockElement.classList.remove('dimmed-week');
                 }
-
                 weekBlockElement.style.display = shouldShowWeek ? 'block' : 'none';
             });
         }
 
-        // String helper
         function normalizeString(str) {
             if (!str) return '';
-            return str.toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .trim();
+            return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
         }
 
         let loginSkipped = false;
 
-        // Teacher Detection and Welcome Banner Logic
+        function clearTeacherUrl() {
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+        }
+
         function detectTeacher() {
             const urlParams = new URLSearchParams(window.location.search);
             let teacherName = urlParams.get('maestro') || urlParams.get('m');
+            let fromUrl = !!teacherName;
 
             if (teacherName) {
                 const matchedTeacher = teacherList.find(t => normalizeString(t) === normalizeString(teacherName));
                 if (matchedTeacher) {
-                    localStorage.setItem('preferredTeacher', matchedTeacher);
                     teacherName = matchedTeacher;
                 } else {
                     teacherName = null;
@@ -3052,8 +3053,13 @@
             const timelineHeader = document.getElementById('timelineHeader');
 
             if (teacherName) {
-                document.getElementById('loginModal').style.display = 'none';
+                localStorage.setItem('preferredTeacher', teacherName);
+                
+                if (fromUrl) {
+                    clearTeacherUrl();
+                }
 
+                document.getElementById('loginModal').style.display = 'none';
                 welcomeBanner.innerHTML = `
                     <div class="welcome-text">
                         <span>👋 ¡Hola, ${teacherName}!</span> Bienvenido a tu Planner Dominical.
@@ -3064,20 +3070,12 @@
                     </div>
                 `;
                 welcomeBanner.style.display = 'flex';
-
-                if (timelineHeader) {
-                    timelineHeader.style.display = 'flex';
-                }
-
+                if (timelineHeader) timelineHeader.style.display = 'flex';
                 filterSchedule(teacherName);
             } else {
                 welcomeBanner.style.display = 'none';
-
-                if (timelineHeader) {
-                    timelineHeader.style.display = 'none';
-                }
-
-                if (!urlParams.get('maestro') && !urlParams.get('m') && !loginSkipped) {
+                if (timelineHeader) timelineHeader.style.display = 'none';
+                if (!fromUrl && !loginSkipped) {
                     document.getElementById('loginModal').style.display = 'flex';
                 }
             }
@@ -3085,50 +3083,32 @@
 
         function clearPreferredTeacher() {
             localStorage.removeItem('preferredTeacher');
+            clearTeacherUrl();
 
-            // Clean URL query parameters
-            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.pushState({ path: newUrl }, '', newUrl);
-
-            // Reset state variables
             currentFilteredTeacher = '';
             showOthersDates = false;
             loginSkipped = false;
             currentSelectedRoom = 'all';
 
-            // Reset UI toggles & room filters
             const toggle = document.getElementById('showOthersToggle');
             if (toggle) toggle.checked = false;
 
             document.querySelectorAll('.room-btn').forEach(btn => {
-                if (btn.getAttribute('data-room') === 'all') {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                if (btn.getAttribute('data-room') === 'all') btn.classList.add('active');
+                else btn.classList.remove('active');
             });
 
-            // Hide welcome banner and timeline header
             document.getElementById('welcomeBanner').style.display = 'none';
             document.getElementById('timelineHeader').style.display = 'none';
 
-            // Reset login modal elements to their initial state
             const selectElem = document.getElementById('loginTeacherSelect');
             if (selectElem) selectElem.value = "";
-
             const confirmBtn = document.getElementById('loginConfirmBtn');
             if (confirmBtn) confirmBtn.disabled = true;
 
-            // Show the login modal again!
             document.getElementById('loginModal').style.display = 'flex';
-
-            // Clear dashboard
             renderTeacherDashboard('');
-
-            // Re-apply filters
             filterSchedule('');
-
-            // Scroll smoothly back to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -3138,13 +3118,9 @@
                 localStorage.setItem('preferredTeacher', selectedTeacher);
                 document.getElementById('loginModal').style.display = 'none';
                 detectTeacher();
-
-                // Smoothly scroll down to month cards
                 setTimeout(() => {
                     const selector = document.querySelector('.month-selector-grid');
-                    if (selector) {
-                        selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                    if (selector) selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 100);
             }
         }
@@ -3153,34 +3129,24 @@
             loginSkipped = true;
             document.getElementById('loginModal').style.display = 'none';
             detectTeacher();
-
-            // Smoothly scroll down to month cards
             setTimeout(() => {
                 const selector = document.querySelector('.month-selector-grid');
-                if (selector) {
-                    selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+                if (selector) selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
         }
 
-        // --- Profile Photo Upload Functions ---
         function triggerDashboardPhotoUpload() {
             const fileInput = document.getElementById('dashboardPhotoInput');
-            if (fileInput) {
-                fileInput.click();
-            }
+            if (fileInput) fileInput.click();
         }
 
         function uploadDashboardPhoto(event) {
             const file = event.target.files[0];
             if (!file) return;
-
-            // Enforce size limit (2MB)
             if (file.size > 2 * 1024 * 1024) {
-                alert("La foto es muy grande. Elige una de menos de 2MB para asegurar una carga ultra-rápida.");
+                alert("La foto es muy grande. Elige una de menos de 2MB.");
                 return;
             }
-
             const reader = new FileReader();
             reader.onload = function (e) {
                 const base64Data = e.target.result;
@@ -3200,7 +3166,8 @@
             }
         }
 
-        // --- Personalized Summary Dashboard Render Function ---
+        // (Funciones de modal de ausencia eliminadas ya que se gestionan en calendario.html)
+
         function renderTeacherDashboard(teacherName) {
             const dashboard = document.getElementById('teacherDashboard');
             if (!dashboard) return;
@@ -3211,40 +3178,126 @@
                 return;
             }
 
-            const normalizedSearch = normalizeString(teacherName);
+            if (normalizeString(teacherName) === 'joaquin') {
+                // Render Joaquin's admin dashboard
+                let scheduleRowsHtml = '';
+                scheduleData.forEach(week => {
+                    if (week.status === 'suspended') {
+                        scheduleRowsHtml += `
+                            <div style="padding: 1.2rem 1rem; border-bottom: 1px solid rgba(120, 120, 120, 0.15); display: flex; justify-content: space-between; align-items: center; background: rgba(244, 63, 94, 0.03);">
+                                <strong style="color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 0.95rem; min-width: 90px;">📅 ${week.date}</strong>
+                                <span style="color: #f43f5e; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(244, 63, 94, 0.1); padding: 0.25rem 0.65rem; border-radius: 6px;">
+                                    🚫 SIN CLASE
+                                </span>
+                            </div>
+                        `;
+                    } else if (week.classes) {
+                        scheduleRowsHtml += `
+                            <div style="padding: 1.2rem 1rem; border-bottom: 1px solid rgba(120, 120, 120, 0.15); display: flex; flex-direction: column; gap: 0.75rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-family: 'Outfit', sans-serif; font-weight: 800; color: #a5b4fc; font-size: 0.95rem;">📅 ${week.date}</span>
+                                    <span style="font-size: 0.72rem; background: rgba(120, 120, 120, 0.15); padding: 0.2rem 0.6rem; border-radius: 50px; color: var(--text-main); font-weight: 600; letter-spacing: 0.25px;">
+                                        ${week.theme.split(':')[0]}
+                                    </span>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.45rem 0.75rem; border-radius: 10px; font-size: 0.82rem;">
+                                        <span style="color: #60a5fa; font-weight: 800; display: flex; align-items: center; gap: 0.3rem;">👶 3-5 años</span>
+                                        <span style="color: var(--text-main); font-weight: 700;">${week.classes["3-5"].encargado} <span style="font-weight: 500; color: var(--text-muted); font-size: 0.78rem;">+ ${week.classes["3-5"].apoyo || '-'}</span></span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.45rem 0.75rem; border-radius: 10px; font-size: 0.82rem;">
+                                        <span style="color: #34d399; font-weight: 800; display: flex; align-items: center; gap: 0.3rem;">👧 6-8 años</span>
+                                        <span style="color: var(--text-main); font-weight: 700;">${week.classes["6-8"].encargado} <span style="font-weight: 500; color: var(--text-muted); font-size: 0.78rem;">+ ${week.classes["6-8"].apoyo || '-'}</span></span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); padding: 0.45rem 0.75rem; border-radius: 10px; font-size: 0.82rem;">
+                                        <span style="color: #fbbf24; font-weight: 800; display: flex; align-items: center; gap: 0.3rem;">👦 9-11 años</span>
+                                        <span style="color: var(--text-main); font-weight: 700;">${week.classes["9-11"].encargado} <span style="font-weight: 500; color: var(--text-muted); font-size: 0.78rem;">+ ${week.classes["9-11"].apoyo || '-'}</span></span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.2); padding: 0.45rem 0.75rem; border-radius: 10px; font-size: 0.82rem;">
+                                        <span style="color: #a78bfa; font-weight: 800; display: flex; align-items: center; gap: 0.3rem;">🎓 JV 12 años</span>
+                                        <span style="color: var(--text-main); font-weight: 700;">${week.classes["jv12"].encargado} <span style="font-weight: 500; color: var(--text-muted); font-size: 0.78rem;">+ ${week.classes["jv12"].apoyo || '-'}</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
 
-            // Calculate stats
+                dashboard.innerHTML = `
+                    <div class="teacher-dashboard-card" style="border-color: rgba(99, 102, 241, 0.35); background: rgba(30, 41, 59, 0.55); padding: 1.8rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="dashboard-user-profile" style="padding-bottom: 1.25rem; border-bottom: 1px solid rgba(120, 120, 120, 0.15);">
+                            <div class="avatar-container" style="width: 76px; height: 76px; box-shadow: 0 0 20px rgba(99, 102, 241, 0.45); border-color: rgba(99, 102, 241, 0.3);">
+                                <span class="avatar-initials" style="font-size: 1.8rem; font-family: 'Outfit', sans-serif;">JQ</span>
+                            </div>
+                            <h3 class="dashboard-username" style="font-size: 1.35rem; margin-top: 0.6rem; color: var(--text-main);">Panel de Coordinación</h3>
+                            <span class="welcome-badge" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; font-size: 0.75rem; padding: 0.3rem 0.85rem; border-radius: 30px; margin-top: 0.35rem; font-weight: 600;">Vista Administrador (Joaquín)</span>
+                        </div>
+
+                        <!-- Bloque de quiénes estarán fuera -->
+                        <div style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 18px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.85rem;">
+                            <h4 style="margin: 0; color: #fda4af; font-size: 0.95rem; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
+                                🛫 Maestros Fuera / Licencias
+                            </h4>
+                            <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                                <div style="display: flex; align-items: start; gap: 0.5rem; background: rgba(120, 120, 120, 0.08); padding: 0.6rem 0.85rem; border-radius: 10px; border-left: 3.5px solid #f43f5e;">
+                                    <div style="font-size: 0.78rem; line-height: 1.45;">
+                                        <div style="font-weight: 800; color: var(--text-main);">14 y 28 de Junio (Vacaciones)</div>
+                                        <div style="color: var(--text-muted); margin-top: 0.1rem; font-weight: 500;">Aby, Alan y Rebeca</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: start; gap: 0.5rem; background: rgba(120, 120, 120, 0.08); padding: 0.6rem 0.85rem; border-radius: 10px; border-left: 3.5px solid #f43f5e;">
+                                    <div style="font-size: 0.78rem; line-height: 1.45;">
+                                        <div style="font-weight: 800; color: var(--text-main);">Todo Julio (Ausencia temporal)</div>
+                                        <div style="color: var(--text-muted); margin-top: 0.1rem; font-weight: 500;">Josué y Raquel</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="dashboard-agenda-title" style="margin-top: 0; margin-bottom: 0.6rem; font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">📋 Control Rápido de Clases</div>
+                            <div class="dashboard-agenda-list" style="max-height: 480px; border: 1px solid rgba(120, 120, 120, 0.15); border-radius: 18px; background: rgba(120, 120, 120, 0.03); padding: 0.25rem;">
+                                ${scheduleRowsHtml}
+                            </div>
+                        </div>
+
+                        <button onclick="clearPreferredTeacher()" class="change-user-btn" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem; border-radius: 14px; font-size: 0.88rem; font-weight: 600; box-sizing: border-box; cursor: pointer; transition: all 0.2s;">
+                            Cerrar sesión de Administrador
+                        </button>
+                    </div>
+                `;
+                dashboard.style.display = 'block';
+                return;
+            }
+
+            const normalizedSearch = normalizeString(teacherName);
             let totalClasses = 0;
             let classesThisMonth = 0;
             let upcomingLessons = [];
             let agendaListHtml = '';
-
-            // Get current active month name
             const activeMonthCard = document.querySelector('.month-card.active');
             const activeMonth = activeMonthCard ? activeMonthCard.getAttribute('data-month') : 'Todos';
 
             scheduleData.forEach(week => {
                 if (!week.classes) return;
-
                 let userHasClassThisWeek = false;
                 let userRoleThisWeek = '';
 
                 Object.keys(week.classes).forEach(groupId => {
                     const c = week.classes[groupId];
-                    if (normalizeString(c.encargado) === normalizedSearch || normalizeString(c.apoyo) === normalizedSearch) {
+                    const isEncargado = matchTeacherName(c.encargado, teacherName);
+                    const isApoyo = matchTeacherName(c.apoyo, teacherName);
+                    if (isEncargado || isApoyo) {
                         totalClasses++;
                         userHasClassThisWeek = true;
-                        userRoleThisWeek = (normalizeString(c.encargado) === normalizedSearch) ? 'lead' : 'support';
+                        userRoleThisWeek = isEncargado ? 'lead' : 'support';
 
-                        // Calculate classes in active month
                         if (activeMonth === 'Todos' || week.date.toLowerCase().includes(activeMonth.toLowerCase())) {
                             classesThisMonth++;
                         }
 
-                        // Collect upcoming lessons
                         if (week.status === 'current') {
                             upcomingLessons.push(week.theme.replace(/^[^\w\s]+/, '').trim());
-
                             const roleText = userRoleThisWeek === 'lead' ? 'Encargado' : 'Apoyo';
                             const roleClass = userRoleThisWeek;
 
@@ -3262,39 +3315,32 @@
                 });
             });
 
-            // Fallback for upcoming lessons string
-            const lessonsSummaryStr = upcomingLessons.length > 0
-                ? upcomingLessons.slice(0, 2).join(', ')
-                : 'Sin lecciones próximas';
-
-            // Get initials for avatar
-            const initials = teacherName.split(' ').map(n => n[0]).join('').substring(0, 2);
-
-            // Check if user has uploaded a custom profile photo
-            const savedPhoto = localStorage.getItem('profilePhoto_' + teacherName);
-            let avatarContent = '';
-            if (savedPhoto) {
-                avatarContent = `<img src="${savedPhoto}" alt="Foto de perfil" style="width: 100%; height: 100%; object-fit: cover;" />`;
+            const lessonsSummaryStr = upcomingLessons.length > 0 ? upcomingLessons.slice(0, 2).join(', ') : 'Sin lecciones próximas';
+            let initials = '';
+            if (teacherName.includes(' y ')) {
+                initials = teacherName.split(' y ').map(n => n.trim()[0]).join('&');
+            } else if (teacherName.includes(' & ')) {
+                initials = teacherName.split(' & ').map(n => n.trim()[0]).join('&');
             } else {
-                avatarContent = `<span class="avatar-initials">${initials}</span>`;
+                initials = teacherName.split(' ').map(n => n[0]).join('').substring(0, 2);
             }
+            const savedPhoto = localStorage.getItem('profilePhoto_' + teacherName);
+            let avatarContent = savedPhoto ? `<img src="${savedPhoto}" alt="Foto de perfil" style="width: 100%; height: 100%; object-fit: cover;" />` : `<span class="avatar-initials">${initials}</span>`;
 
-            // Populate dashboard HTML
+            // Extraer feedback de nuestro objeto (si existe)
+            const feedbackTexto = teacherProfiles[teacherName] ? teacherProfiles[teacherName].feedback : "Sigue haciendo un gran trabajo.";
+
             dashboard.innerHTML = `
                 <div class="teacher-dashboard-card">
-                    <!-- Profile Section -->
                     <div class="dashboard-user-profile">
                         <div class="avatar-container" onclick="triggerDashboardPhotoUpload()" style="cursor: pointer;" title="Haz clic para subir tu foto de perfil">
                             ${avatarContent}
-                            <div class="avatar-upload-overlay">
-                                <span>📷</span>
-                            </div>
+                            <div class="avatar-upload-overlay"><span>📷</span></div>
                         </div>
                         <h3 class="dashboard-username">${teacherName}</h3>
                         ${savedPhoto ? `<button onclick="removeProfilePhoto('${teacherName}')" style="background: none; border: none; color: var(--text-muted); font-size: 0.75rem; text-decoration: underline; cursor: pointer; margin-top: -0.25rem;">Eliminar foto</button>` : ''}
                     </div>
 
-                    <!-- Metrics Grid 2x2 -->
                     <div class="dashboard-metrics-grid">
                         <div class="metric-box" title="Clases programadas en el mes seleccionado">
                             <span class="metric-val">${classesThisMonth}</span>
@@ -3304,32 +3350,36 @@
                             <span class="metric-val">${totalClasses}</span>
                             <span class="metric-lbl">Clases Totales</span>
                         </div>
-                        
-                        <!-- Next Lessons large widget -->
                         <div class="metric-large-box">
                             <span class="metric-large-title">📖 Mis Temas Próximos</span>
                             <span class="metric-large-desc">${lessonsSummaryStr}</span>
                         </div>
                     </div>
 
-                    <!-- Focused Agenda Title & List -->
                     <div class="dashboard-agenda-title">🗓️ Mis Próximas Fechas</div>
                     <div class="dashboard-agenda-list">
                         ${agendaListHtml || '<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 1rem 0;">No tienes clases próximas programadas.</div>'}
                     </div>
+
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 12px; padding: 1rem; margin-top: 0.5rem;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #34d399; font-size: 0.9rem;">💬 Feedback Pastoral</h4>
+                        <p style="font-size: 0.8rem; color: #cbd5e1; margin: 0; line-height: 1.4;">${feedbackTexto}</p>
+                    </div>
+
+                    <button onclick="reportAbsence('${teacherName}')" style="width: 100%; margin-top: 0.5rem; padding: 0.8rem; background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4); border-radius: 12px; cursor: pointer; font-weight: bold; font-family: 'Inter', sans-serif; transition: all 0.2s;">
+                        ⚠️ No puedo dar clase (Avisar)
+                    </button>
                 </div>
             `;
 
             dashboard.style.display = 'block';
         }
 
-        // Initialize background theme on startup
         function initBackground() {
             const savedBg = localStorage.getItem('preferredBackground') || 'dark';
             changeBackground(savedBg);
         }
 
-        // Populate login modal teacher dropdown options
         const loginSelect = document.getElementById('loginTeacherSelect');
         if (loginSelect) {
             teacherList.forEach(teacher => {
@@ -3345,7 +3395,6 @@
             });
         }
 
-        // Hamburger Drawer Control Functions
         function toggleMenu() {
             const btn = document.getElementById('menuToggleBtn');
             const drawer = document.getElementById('navDrawer');
@@ -3370,61 +3419,45 @@
 
         function navigateToSection(sectionId) {
             toggleMenu();
-
             if (sectionId === 'roles') {
                 setTimeout(() => {
                     const selector = document.querySelector('.month-selector-grid');
-                    if (selector) {
-                        selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                    if (selector) selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 300);
             }
         }
 
-        // Custom Background Picker Functions
         function changeBackground(themeName) {
             document.body.classList.remove('bg-theme-light', 'bg-theme-dark');
             document.body.classList.add(`bg-theme-${themeName}`);
             localStorage.setItem('preferredBackground', themeName);
 
             document.querySelectorAll('.bg-chip').forEach(chip => {
-                if (chip.classList.contains(`bg-${themeName}`)) {
-                    chip.classList.add('active');
-                } else {
-                    chip.classList.remove('active');
-                }
+                if (chip.classList.contains(`bg-${themeName}`)) chip.classList.add('active');
+                else chip.classList.remove('active');
             });
         }
 
-        // Premium Web Share and Clipboard copy function
-        // Premium Web Share and Modal function
         function shareApp() {
             const shareUrl = "https://rodriguezj75468-glitch.github.io/Rol_de_maestros/";
-            const shareText = "👋 ¡Hola! Aquí tienes el Rol de Clases Dominicales actualizado (Mayo - Julio 2026). Consúltalo en tiempo real aquí:";
+            const shareText = "👋 ¡Hola! Aquí tienes el Rol de Clases Dominicales actualizado (Junio - Agosto 2026). Consúltalo en tiempo real aquí:";
             
-            // Set input url
             const urlInput = document.getElementById('shareUrlInput');
             if (urlInput) urlInput.value = shareUrl;
 
-            // Generate QR Code dynamically
             const qrImg = document.getElementById('shareQrImg');
             if (qrImg) {
                 qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shareUrl)}`;
             }
 
-            // Set WhatsApp link
             const whatsappBtn = document.getElementById('shareWhatsappBtn');
             if (whatsappBtn) {
                 whatsappBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
             }
 
-            // Open Modal
             const modal = document.getElementById('shareModal');
-            if (modal) {
-                modal.classList.add('open');
-            }
+            if (modal) modal.classList.add('open');
             
-            // Close the navigation drawer if open
             const btn = document.getElementById('menuToggleBtn');
             const drawer = document.getElementById('navDrawer');
             const overlay = document.getElementById('drawerOverlay');
@@ -3436,7 +3469,6 @@
         }
 
         function closeShareModal(event) {
-            // Close if clicked close button (event is null) or clicked background overlay
             if (!event || event.target === document.getElementById('shareModal')) {
                 const modal = document.getElementById('shareModal');
                 if (modal) modal.classList.remove('open');
@@ -3445,14 +3477,12 @@
 
         async function copyShareUrl() {
             const shareUrl = "https://rodriguezj75468-glitch.github.io/Rol_de_maestros/";
-            const shareText = "👋 ¡Hola! Aquí tienes el Rol de Clases Dominicales actualizado (Mayo - Julio 2026). Consúltalo en tiempo real aquí:";
+            const shareText = "👋 ¡Hola! Aquí tienes el Rol de Clases Dominicales actualizado (Junio - Agosto 2026). Consúltalo en tiempo real aquí:";
             
             try {
                 await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
                 showToastNotification('📋 ¡Mensaje y enlace copiados!');
             } catch (err) {
-                console.error('Could not copy text: ', err);
-                // Fallback copy using input
                 const urlInput = document.getElementById('shareUrlInput');
                 if (urlInput) {
                     urlInput.select();
@@ -3462,50 +3492,32 @@
             }
         }
 
-        // Beautiful custom toast notification
         function showToastNotification(message) {
             let toast = document.getElementById('customShareToast');
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'customShareToast';
                 toast.style.cssText = `
-                    position: fixed;
-                    bottom: 2rem;
-                    left: 50%;
-                    transform: translateX(-50%) translateY(100px);
-                    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-                    color: white;
-                    padding: 1rem 2rem;
-                    border-radius: 50px;
-                    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
-                    z-index: 10000;
-                    font-family: 'Outfit', sans-serif;
-                    font-weight: 600;
-                    font-size: 0.95rem;
+                    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+                    background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 1rem 2rem;
+                    border-radius: 50px; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4); z-index: 10000;
+                    font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem;
                     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
-                    opacity: 0;
-                    pointer-events: none;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
+                    opacity: 0; pointer-events: none; display: flex; align-items: center; gap: 0.5rem;
                 `;
                 document.body.appendChild(toast);
             }
             toast.innerText = message;
-            // Trigger animation
             setTimeout(() => {
                 toast.style.transform = 'translateX(-50%) translateY(0)';
                 toast.style.opacity = '1';
             }, 50);
-            
-            // Hide after 3 seconds
             setTimeout(() => {
                 toast.style.transform = 'translateX(-50%) translateY(100px)';
                 toast.style.opacity = '0';
             }, 3000);
         }
 
-        // Start App
         renderTimeline();
         initBackground();
         detectTeacher();
