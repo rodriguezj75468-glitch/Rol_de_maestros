@@ -1242,6 +1242,72 @@
             .search-input {
                 padding: 0.8rem 1rem;
             }
+
+            /* Responsive Welcome Banner */
+            .welcome-banner {
+                flex-direction: column;
+                gap: 0.85rem;
+                align-items: center;
+                text-align: center;
+                padding: 1rem 1.2rem;
+            }
+
+            .welcome-text {
+                font-size: 1.05rem;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .welcome-actions {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .change-user-btn {
+                width: 100%;
+                padding: 0.45rem 1rem;
+            }
+
+            /* Month selector spacing for small devices */
+            .month-selector-grid {
+                gap: 0.5rem;
+                width: 95%;
+                margin: 1.2rem auto 2rem;
+            }
+
+            .month-card {
+                padding: 0.5rem 0.25rem;
+                min-height: 56px;
+            }
+
+            .month-name {
+                font-size: 0.85rem;
+            }
+
+            .month-lessons-badge {
+                font-size: 0.7rem;
+                padding: 0.1rem 0.45rem;
+            }
+
+            /* Lesson Card spacing adjustments to prevent text cut-off */
+            .lesson-detail-card {
+                padding: 2rem 1.1rem 1.2rem;
+            }
+
+            .card-lesson-title {
+                font-size: 1.15rem;
+            }
+
+            .card-role-item {
+                font-size: 0.88rem;
+                padding: 0.35rem 0.45rem;
+            }
+
+            .card-role-label {
+                font-size: 0.6rem;
+                min-width: 65px;
+                padding: 0.15rem 0.35rem;
+            }
         }
 
         /* Welcome Banner Premium Styles */
@@ -2473,11 +2539,11 @@
     <!-- Month Selector Grid -->
     <div class="month-selector-grid">
         <div class="month-card" data-month="Todos" onclick="selectMonth('Todos')">
-            <span class="month-lessons-badge">13</span>
+            <span class="month-lessons-badge">10</span>
             <span class="month-name">Todos</span>
         </div>
         <div class="month-card active" data-month="Junio" onclick="selectMonth('Junio')">
-            <span class="month-lessons-badge">4</span>
+            <span class="month-lessons-badge">1</span>
             <span class="month-name">Junio</span>
         </div>
         <div class="month-card" data-month="Julio" onclick="selectMonth('Julio')">
@@ -2608,36 +2674,6 @@
 
         // --- 📅 BASE DE DATOS DE ROLES ACTUALIZADA ---
         const scheduleData = [
-            {
-                date: "07 de Junio", theme: "🚀 Lección 4: Débora", status: "past", badgeText: "Completado",
-                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
-                classes: {
-                    "3-5": { encargado: "Alondra", apoyo: "Rebeca" }, 
-                    "6-8": { encargado: "Aby", apoyo: "Denisse" },
-                    "9-11": { encargado: "Daniel", apoyo: "Cristina" },
-                    "jv12": { encargado: "Ramón", apoyo: "Claudia" }
-                }
-            },
-            {
-                date: "14 de Junio", theme: "💡 Lección 5: Daniel y la obediencia", status: "past", badgeText: "Completado",
-                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
-                classes: {
-                    "3-5": { encargado: "Alexa", apoyo: "Yadira" },
-                    "6-8": { encargado: "Karla", apoyo: "Alexa Sarai" },
-                    "9-11": { encargado: "Mauricio", apoyo: "Cristina" },
-                    "jv12": { encargado: "Josué", apoyo: "Raquel" }
-                }
-            },
-            {
-                date: "21 de Junio", theme: "🔥 Lección 6: Ester", status: "past", badgeText: "Completado",
-                materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
-                classes: {
-                    "3-5": { encargado: "Liz", apoyo: "Rebeca" },
-                    "6-8": { encargado: "Ramón", apoyo: "Claudia" },
-                    "9-11": { encargado: "Juan Carlos", apoyo: "Isaí" },
-                    "jv12": { encargado: "Por asignar", apoyo: "Por asignar" }
-                }
-            },
             {
                 date: "28 de Junio", theme: "⭐ Lección 7: Esteban enfrenta a la muerte", status: "current", badgeText: "Próximo",
                 materialUrl: "https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f",
@@ -2895,10 +2931,9 @@
                 localStorage.setItem('preferredTeacher', matchedTeacher);
                 welcomeBanner.innerHTML = `
                     <div class="welcome-text">
-                        <span>👋 ¡Hola, ${matchedTeacher}!</span> Bienvenido a tu Planner Dominical.
+                        <span>👋 ¡Hola, ${matchedTeacher}!</span>
                     </div>
                     <div class="welcome-actions">
-                        <span class="welcome-badge">Vista Personalizada</span>
                         <button class="change-user-btn" onclick="clearPreferredTeacher()">Cerrar sesión</button>
                     </div>
                 `;
@@ -3062,10 +3097,9 @@
                 document.getElementById('loginModal').style.display = 'none';
                 welcomeBanner.innerHTML = `
                     <div class="welcome-text">
-                        <span>👋 ¡Hola, ${teacherName}!</span> Bienvenido a tu Planner Dominical.
+                        <span>👋 ¡Hola, ${teacherName}!</span>
                     </div>
                     <div class="welcome-actions">
-                        <span class="welcome-badge">Vista Personalizada</span>
                         <button class="change-user-btn" onclick="clearPreferredTeacher()">Cambiar de usuario</button>
                     </div>
                 `;
