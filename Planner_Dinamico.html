@@ -2917,8 +2917,30 @@
         }
 
         function reportAbsence(teacherName) {
-            const adminPhone = "5215555555555"; // Teléfono real del administrador
-            const message = `Hola, soy ${teacherName}. Solicito un cambio o apoyo porque NO podré asistir a mi próxima clase dominical programada.`;
+            const adminPhone = "528131729993"; // Teléfono del administrador
+            
+            // Buscar la fecha de la próxima clase del maestro
+            let nextDate = "";
+            if (typeof scheduleData !== 'undefined') {
+                for (let i = 0; i < scheduleData.length; i++) {
+                    const week = scheduleData[i];
+                    if (week.classes) {
+                        let assigned = false;
+                        Object.keys(week.classes).forEach(groupId => {
+                            const c = week.classes[groupId];
+                            if (matchTeacherName(c.encargado, teacherName) || matchTeacherName(c.apoyo, teacherName)) {
+                                assigned = true;
+                            }
+                        });
+                        if (assigned) {
+                            nextDate = week.date;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            const message = nextDate ? `hola, no puedo dar clase el ${nextDate}` : "hola, no puedo dar clase";
             const url = `https://api.whatsapp.com/send?phone=${adminPhone}&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
