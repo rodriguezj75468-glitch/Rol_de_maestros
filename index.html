@@ -2637,6 +2637,12 @@
                 <span class="drawer-item-text">1. Roles y Cronograma</span>
             </div>
 
+            <!-- Option 1.5: Calendario y Asistencias -->
+            <a href="calendario.html" class="drawer-item" style="text-decoration: none;">
+                <span class="drawer-item-icon">📅</span>
+                <span class="drawer-item-text">1.5. Calendario y Asistencias</span>
+            </a>
+
             <!-- Option 2: Recursos (Collapsible Dropdown) -->
             <div id="recursosToggleItem" class="drawer-item" onclick="toggleRecursosMenu()">
                 <span class="drawer-item-icon">📚</span>
@@ -2659,7 +2665,7 @@
                     <span class="drawer-link-icon">👶👧</span>
                     <div class="drawer-link-info">
                         <span class="drawer-link-title">Clases 3-5 y 6-8 años</span>
-                        <span class="drawer-link-desc">Material de Párvulos y Primaria A</span>
+                        <span class="drawer-link-desc">Material de Pequeños y Medianos</span>
                     </div>
                 </a>
                 <a href="https://drive.google.com/drive/folders/1XdLXbrPqR_I-9ibbIZppEnU2UMRLz65j" target="_blank"
@@ -2667,7 +2673,7 @@
                     <span class="drawer-link-icon">👦</span>
                     <div class="drawer-link-info">
                         <span class="drawer-link-title">Clases 9-11 años</span>
-                        <span class="drawer-link-desc">Material de Primaria B</span>
+                        <span class="drawer-link-desc">Material de Grandes</span>
                     </div>
                 </a>
                 <a href="https://drive.google.com/drive/folders/1cFyxxvBvxgcWTvmt5h1HdizNw-HnxF4q" target="_blank"
@@ -2778,6 +2784,11 @@
     <header>
         <h1>Planner Dominical</h1>
         <div class="subtitle">Roles y Temas de Clases Dominicales 📅</div>
+        <div style="margin-top: 1.5rem;">
+            <a href="calendario.html" style="display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 0.75rem 1.5rem; border-radius: 50px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35); font-family: 'Outfit', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(124, 58, 237, 0.5)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(99, 102, 241, 0.35)';">
+                <span>📅</span> Calendario y Asistencias
+            </a>
+        </div>
     </header>
 
     <!-- Welcome Banner Container -->
@@ -2853,7 +2864,33 @@
         <div id="teacherDashboard" class="teacher-dashboard-container" style="display: none; width: 100%;"></div>
     </div>
 
+    <!-- Firebase SDK (v9 Compat Mode) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <script>
+        // --- ☁️ CONFIGURACIÓN DE FIREBASE ---
+        // Reemplaza con tus propias credenciales de Firebase cuando crees tu proyecto.
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        let db = null;
+        try {
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                const app = firebase.initializeApp(firebaseConfig);
+                db = firebase.database(app);
+            }
+        } catch (error) {
+            console.error("Error al inicializar Firebase:", error);
+        }
+
         // --- 🔐 SISTEMA DE PERFILES Y FEEDBACK SIMULADO ---
         const teacherProfiles = {
             "Aby": { pass: "Aby2026!", feedback: "Excelente manejo de los niños, ¡sigue así!" },
@@ -2940,7 +2977,9 @@
                 }
             }
             
-            const message = nextDate ? `hola, no puedo dar clase el ${nextDate}` : "hola, no puedo dar clase";
+            const message = nextDate 
+                ? `Hola, Joaquin. Espero que te encuentres muy bien. Te escribo para informarte que, no estaré disponible para dar clase el próximo ${nextDate}.` 
+                : `Hola, Joaquin. Espero que te encuentres muy bien. Te escribo para informarte que, no estaré disponible para dar clase el próximo domingo.`;
             const url = `https://api.whatsapp.com/send?phone=${adminPhone}&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
@@ -3136,9 +3175,9 @@
                 } else {
                     let groupsHtml = `<div class="groups-grid">`;
                     const groupInfos = {
-                        "3-5": { name: "3 a 5 años", age: "👶 Párvulos", room: "Primaria A", cssClass: "g-3-5", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
-                        "6-8": { name: "6 a 8 años", age: "👧 Primaria A", room: "Primaria A", cssClass: "g-6-8", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
-                        "9-11": { name: "9 a 11 años", age: "👦 Primaria B", room: "Primaria B", cssClass: "g-9-11", url: "https://drive.google.com/drive/folders/1XdLXbrPqR_I-9ibbIZppEnU2UMRLz65j" },
+                        "3-5": { name: "3 a 5 años", age: "👶 Pequeños", room: "Pequeños", cssClass: "g-3-5", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
+                        "6-8": { name: "6 a 8 años", age: "👧 Medianos", room: "Medianos", cssClass: "g-6-8", url: "https://drive.google.com/drive/folders/199YCnYF9tL-fk0segFH5zwHVDCkPtY_v" },
+                        "9-11": { name: "9 a 11 años", age: "👦 Grandes", room: "Grandes", cssClass: "g-9-11", url: "https://drive.google.com/drive/folders/1XdLXbrPqR_I-9ibbIZppEnU2UMRLz65j" },
                         "jv12": { name: "JV 12", age: "🎓 Pre-adolescentes", room: "Pre-adolescentes", cssClass: "g-jv12", url: "https://drive.google.com/drive/folders/1cFyxxvBvxgcWTvmt5h1HdizNw-HnxF4q" }
                     };
 
@@ -3570,6 +3609,14 @@
                 const currentTeacher = localStorage.getItem('preferredTeacher') || currentFilteredTeacher;
                 if (currentTeacher) {
                     localStorage.setItem('profilePhoto_' + currentTeacher, base64Data);
+                    
+                    // Guardar en Firebase en segundo plano
+                    if (db) {
+                        const safeName = currentTeacher.replace(/[.#$[\]]/g, "_");
+                        db.ref('fotos_perfil/' + safeName).set(base64Data)
+                            .catch(err => console.error("Error guardando en Firebase:", err));
+                    }
+                    
                     renderTeacherDashboard(currentTeacher);
                 }
             };
@@ -3579,8 +3626,36 @@
         function removeProfilePhoto(teacherName) {
             if (confirm("¿Estás seguro de que quieres eliminar tu foto de perfil?")) {
                 localStorage.removeItem('profilePhoto_' + teacherName);
+                
+                // Eliminar de Firebase en segundo plano
+                if (db) {
+                    const safeName = teacherName.replace(/[.#$[\]]/g, "_");
+                    db.ref('fotos_perfil/' + safeName).remove()
+                        .catch(err => console.error("Error eliminando de Firebase:", err));
+                }
+                
                 renderTeacherDashboard(teacherName);
             }
+        }
+
+        function loadPhotoFromFirebase(teacherName) {
+            if (!db) return;
+            const safeName = teacherName.replace(/[.#$[\]]/g, "_");
+            db.ref('fotos_perfil/' + safeName).once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    if (data) {
+                        const localPhoto = localStorage.getItem('profilePhoto_' + teacherName);
+                        if (localPhoto !== data) {
+                            localStorage.setItem('profilePhoto_' + teacherName, data);
+                            const activeTeacher = localStorage.getItem('preferredTeacher') || currentFilteredTeacher;
+                            if (activeTeacher === teacherName) {
+                                renderTeacherDashboard(teacherName);
+                            }
+                        }
+                    }
+                })
+                .catch(err => console.error("Error al descargar de Firebase:", err));
         }
 
         // (Funciones de modal de ausencia eliminadas ya que se gestionan en calendario.html)
@@ -3593,6 +3668,11 @@
                 dashboard.style.display = 'none';
                 dashboard.innerHTML = '';
                 return;
+            }
+
+            // Sincronizar foto desde Firebase en segundo plano
+            if (typeof loadPhotoFromFirebase === 'function') {
+                loadPhotoFromFirebase(teacherName);
             }
 
             if (normalizeString(teacherName) === 'joaquin') {
