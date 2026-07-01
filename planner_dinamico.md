@@ -12,12 +12,12 @@ Este es el rol de maestros actualizado para los meses de **Junio, Julio y Agosto
 | **05 de Julio** | [Lección 8: Pablo](https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f) | **E:** Alexa <br> **A:** Rebeca | **E:** Aby <br> **A:** Denisse | **E:** Alan <br> **A:** Mauricio | **E:** Robert <br> **A:** Sara |
 | **12 de Julio** | [Lección 9](https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f) | **E:** Liz <br> **A:** Yadira | **E:** Karla <br> **A:** Alexa Sarai | **E:** Daniel <br> **A:** Cristina | **E:** Ramón <br> **A:** Claudia |
 | **19 de Julio** | [Lección 10](https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f) | **E:** Danna <br> **A:** Rebeca | **E:** Aby <br> **A:** Denisse | **E:** Joaquín <br> **A:** Isaí | **E:** Sinddy <br> **A:** Juan Carlos |
-| **26 de Julio** | [Lección 11](https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f) | **E:** Alexa <br> **A:** Yadira | **E:** Ramón <br> **A:** Claudia | **E:** Cristina <br> **A:** Mauricio | **E:** Josué <br> **A:** Raquel |
+| **26 de Julio** | [Lección 11](https://drive.google.com/drive/folders/1S8Zy5I5nQ5Ej4cwmp5_r-UD4fiRb4N4f) | **E:** Alexa <br> **A:** Yadira | **E:** Ramón <br> **A:** Claudia | **E:** Cristina <br> **A:** Mauricio | **E:** Aby <br> **A:** Alan |
 | **02 de Agosto** | Lección 12 | **E:** Liz <br> **A:** Rebeca | **E:** Sinddy <br> **A:** Carlos | **E:** Alan <br> **A:** Juan Carlos | **E:** Robert <br> **A:** Sara |
 | **09 de Agosto** | Lección 13 | **E:** Danna <br> **A:** Yadira | **E:** Karla <br> **A:** Alexa Sarai | **E:** Daniel <br> **A:** Cristina | **E:** Ramón <br> **A:** Claudia |
 | **16 de Agosto** | Lección 14 | **E:** Alexa <br> **A:** Alondra | **E:** Aby <br> **A:** Denisse | **E:** Alan <br> **A:** Mauricio | **E:** Josué <br> **A:** Raquel |
-| **23 de Agosto** | Lección 15 | **E:** Liz <br> **A:** Alondra | **E:** Sinddy <br> **A:** Carlos | **E:** Joaquín <br> **A:** Isaí | **E:** Robert <br> **A:** Sara |
-| **30 de Agosto** | Lección 16 | **E:** Danna <br> **A:** Rebeca | **E:** Karla <br> **A:** Alexa Sarai | **E:** Daniel <br> **A:** Cristina | **E:** Ramón <br> **A:** Claudia |
+| **23 de Agosto** | Lección 15 | **E:** Liz <br> **A:** Alondra | **E:** Sinddy <br> **A:** Carlos | **E:** Joaquín <br> **A:** Isaí | **E:** Ramón <br> **A:** Claudia |
+| **30 de Agosto** | Lección 16 | **E:** Danna <br> **A:** Rebeca | **E:** Karla <br> **A:** Alexa Sarai | **E:** Daniel <br> **A:** Cristina | **E:** Robert <br> **A:** Sara |
 
 *Abreviaturas: **E** = Encargado, **A** = Apoyo.*
 
